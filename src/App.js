@@ -1,24 +1,40 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { ChakraProvider, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Stack,
+} from '@chakra-ui/react';
+//import Homepage from '../routes/Homepage';
+import CustomAppBar from './app/component/CustomAppBar';
+import Homepage from './app/routes/Homepage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box
+    display="flex"
+    justifyContent="center"
+    bgColor="gray.200"
+  >
+    <Box
+      minWidth="375px"
+      width={{ base: '100%', md: '380px' }}
+      borderColor="gray.200"
+      minHeight="200px"
+      position="relative"
+      bg="white"
+    >
+      <Stack
+        spacing={14}
+      >
+        <Text>Halo</Text>
+        <CustomAppBar/>
+      
+        <Homepage /> 
+        
+      </Stack>
+    </Box>
+  </Box>
   );
 }
 
