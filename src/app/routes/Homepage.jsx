@@ -1,10 +1,10 @@
 import { Box, Heading, Flex, Link, Text, useBoolean, Spinner, Button } from '@chakra-ui/react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, version } from 'react';
 import SearchComponent from '../component/Search';
 
 import CardComponent from '../component/CardComponent';
 import db from '../firebase'
-import { query, collection, where, doc, setDoc, getDocs,  } from "firebase/firestore"; 
+import { query, collection, where, doc, setDoc, getDocs, getDoc } from "firebase/firestore"; 
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
@@ -16,18 +16,31 @@ export default function Homepage(props) {
     // Redirect logic here
     window.open(location, '_blank');
   };
-  const formLink = "https://docs.google.com/forms/d/e/1FAIpQLScU7bvfx9pVy5esZAB7ptFUQrjdWh5kR3xg96kGcTc4WE81Dw/viewform"
+  const formLink = "https://docs.google.com/forms/d/e/1FAIpQLScfj6JYCMXojOo3FSFR4-UP8BIe5WfXtkEsYHkFcJw6fIgWyw/viewform"
 
   const fetchData = async () => {
     setIsLoading(true)
 
     try {
       let tempData = [];
-      const querySnapshot = await getDocs(collection(db, "umkm"));
-      querySnapshot.forEach((doc) => {
-        tempData.push({"id": doc.id, ...doc.data()})
-      });
-  
+      const currentVersion = localStorage.getItem("fireStoreVersion")
+      const currentMasterData = JSON.parse(localStorage.getItem("masterData"))
+
+      const remoteVersion = (await getDoc(doc(db, "version", "app-version"))).data().version;
+
+      localStorage.setItem("fireStoreVersion", remoteVersion)
+
+      if(currentVersion == remoteVersion && currentMasterData != null) {
+        tempData = currentMasterData
+      } else {
+        const querySnapshot = await getDocs(collection(db, "umkm"));
+        querySnapshot.forEach((doc) => {
+          tempData.push({"id": doc.id, ...doc.data()})
+        });
+
+        localStorage.setItem("masterData", JSON.stringify(tempData))
+      }
+
       setData(tempData.filter(item => item.isPriority == true));
       setMasterData(tempData);
     } catch (error) {
@@ -39,14 +52,22 @@ export default function Homepage(props) {
   };
 
   const filter = async (query) => {
+
+    if(query.length < 3 && query != "") return;
+
+    setIsLoading(true)
     if(query != "") {
       setSearchQuery(query)
       setData(masterData.filter(item => item.services.toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
     }
-      else {
-      setSearchQuery(setSearchQuery)
+    else {
+      setSearchQuery("")
       setData(masterData.filter(item => item.isPriority == true));
     }
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 500);
+    
   }
 
   useEffect(() => {
@@ -67,7 +88,7 @@ export default function Homepage(props) {
       <Heading as="h1" mt="16" fontSize={32}>Halo Sanak,</Heading>
       <Text fontSize={36} >mau cari apa hari ini?</Text>
 
-      <Text fontSize={14} mx="8" mb="8">Cari yang anda butuhkan <br />di Portal Data #1 di Sumbawa.</Text>
+      <Text fontSize={14} mx="8" mb="8">Cari data yang anda butuhkan <br />di Portal Data #1 di Sumbawa.</Text>
       
       <SearchComponent
         onSearch={filter}
@@ -75,7 +96,11 @@ export default function Homepage(props) {
       <Box>
       {isLoading ? <Spinner mt="16" size="xl"/> :
       data.length > 0 ? <Box>
-      {searchQuery == "" ? <Text color="grey" mt={4} fontSize={14}>Atau hubungi nomor darurat di bawah ini:</Text> : <></>}
+      {searchQuery.length == 0 ? 
+        <Box  mt={4}>
+          <Text color="grey" mt={4} fontSize={12}>Hubungi Nomor Di Bawah Ini Dalam Keadaan Darurat:</Text>
+        </Box>
+        : <></>}
       {data.map((item, index) => (
        <CardComponent
         key={item.id}
@@ -91,6 +116,7 @@ export default function Homepage(props) {
         operationalTime={item.operationalTime}
         onCtaClick={()=>{}}
         isPriority={item.isPriority}
+        category={item.category}
       />
       ))} </Box> : <Box 
           mt={16}
@@ -100,6 +126,12 @@ export default function Homepage(props) {
           <Button onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
         </Box>}
       </Box>
+
+      {searchQuery != "" ? <></> :
+      <Box mt="32">
+        <Text fontWeight={500} fontSize={15}>Ingin menjadi bagian dari pengembangan<br />  Portal Data Sumbawa? </Text>
+        <Button mt={2} onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"} >Jadi Kontributor Portal Data</Button>
+      </Box>}
       
       </Box>
   </Flex>
