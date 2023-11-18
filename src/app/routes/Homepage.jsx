@@ -21,6 +21,10 @@ export default function Homepage(props) {
   const WA_ADMIN_MESSAGE = "Halo Admin, saya sedang mencari " + searchQuery + " tapi datanya belum tersedia, mohon bantuannya."  
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_ADMIN_MESSAGE)
   
+
+  const WA_CONTRIBUTOR_MESSAGE = "Halo Admin, saya ingin bertanya tentang kontributor di portal Sumbawa, mohon informasinya."  
+  const whatsappLinkContributor = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_CONTRIBUTOR_MESSAGE)
+  
   const formLink = "https://docs.google.com/forms/d/e/1FAIpQLScfj6JYCMXojOo3FSFR4-UP8BIe5WfXtkEsYHkFcJw6fIgWyw/viewform"
 
   const fetchData = async () => {
@@ -139,7 +143,16 @@ export default function Homepage(props) {
         textAlign="center">
         <Box>
           <Text fontWeight={500} fontSize={12}>Ingin menjadi bagian dari pengembangan<br />  Portal Data Sumbawa? </Text>
-          <Button mt={2} onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"} >Jadi Kontributor Portal Data</Button>
+          <Button mt={2} onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"} >Isi Form Kontributor Portal Data</Button>
+          <Text fontSize={14} mt={1}>Atau</Text>
+          <Button 
+                  colorScheme={'teal'} 
+                  as={Link}
+                  textDecoration={'underline'}
+                  onClick={()=> {onGotoExternalLink(whatsappLinkContributor)}}
+                  variant={"link"}>
+                  Hubungi Admin Portal Sumbawa
+                </Button>
         </Box>
       </Box>}
     </Box>

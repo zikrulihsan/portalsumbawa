@@ -6,10 +6,18 @@ import copy from 'clipboard-copy';
 
 const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, description, tags, operationalTime, location, operationalDay, onCtaClick}) => {
   
-  const redirectToLocation = (location) => {
-    // Redirect logic here
-    window.open(location, '_blank');
+  const redirectToLocation = (address) => {
+    let validAddress = address
+    if(address.startsWith("https://api.whatsapp.com") && !validatePhoneNumber())
+        validAddress = "tel:" + waNumber
+
+    window.open(validAddress, '_blank'); 
+
   };
+  
+  const validatePhoneNumber = () => {
+    return waNumber.slice(2) == "08" || waNumber.slice(3) == "628"
+  }
 
   const toast = useToast();
 
@@ -29,10 +37,30 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
     }
   };
 
-  const orderMessage = "Halo, saya dapat nomornya dari Portal Sumbawa, boleh tanya tentang produknya?"
+  const isKurir = () => {
+    return description.toLowerCase().includes("kurir")
+  }
+
+  const convertedWaNumber = () => {
+    if(isEmpty(waNumber)) return '6282338588078';
+    return '62' + waNumber.slice(1);
+  }
   
-  const whatsappLink = "https://api.whatsapp.com/send/?phone=" + waNumber + "&text=" + encodeURI(orderMessage)
+  const isEmpty = (data) => {
+    return data == "-" || data == "" || data == null || data == undefined
+  }
+  const waMessage = isEmpty(waNumber) || isKurir()
+                      ? `Halo Admin, mohon bantuannya untuk mencarikan info lebih lanjut tentang ${title.toString()}.` 
+                      : "Halo, saya dapat nomornya dari Portal Sumbawa, boleh tanya tentang produknya?"
   
+  const whatsappLink = "https://api.whatsapp.com/send/?phone=" + convertedWaNumber() + "&text=" + waMessage
+  
+  const isHotel = () => {
+    if(tags != undefined && tags.length > 0)
+      return tags[0].includes("Hotel")
+    else return false
+  }
+
   return (
     <>
       <Heading as="h2" size="md" mb={2}>
@@ -42,9 +70,10 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
       <Text mb={4}><b>Menyediakan:</b> {description}</Text>
       <Flex alignItems={"center"} gap={1}  mb={2}>
             <Box><FaMapMarkerAlt size={16}/></Box>
-            <a href={addressLink} target="_blank" rel="noopener noreferrer">{location}</a>
+            {!isEmpty(location) ?
+            <a href={addressLink} target="_blank" rel="noopener noreferrer">{location}</a> : <Text color={"gray"}>Alamat belum terdata</Text>}
         </Flex>
-      <Text color={'teal'} mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text> 
+      <Text color={'teal'} mb={4}><b>Buka: </b>{!isEmpty(operationalTime) ? operationalTime + "," : "Jadwal Operasional Belum Terdata"} {operationalDay}</Text> 
         <Text mb={2}>Category:</Text>
         <Box mb={4}>
             {tags.map((tag, index) => (
@@ -80,18 +109,26 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
                 width="full" 
                 colorScheme={'teal'} 
                 mb={2} 
+                isDisabled={isEmpty(waNumber)}
                 onClick={()=> {redirectToLocation(whatsappLink)}}
                 leftIcon={<FaWhatsapp/>}>
-                Chat Penjual
+                Chat Pemilik
             </Button>
-            <Button 
+            {isHotel() || isKurir() || isEmpty(waNumber) ? <Button 
+                width="full" 
+                colorScheme={'teal'} 
+                variant="outline" 
+                onClick={()=> {redirectToLocation(whatsappLink)}}
+                leftIcon={<FaWhatsapp/>}>
+                Hubungi Admin
+            </Button> : <Button 
                 width="full" 
                 colorScheme={'teal'} 
                 variant="outline" 
                 onClick={()=> {redirectToLocation("https://linktr.ee/PortalSumbawa")}}
                 leftIcon={<FaWhatsapp/>}>
                 Pesan Via Kurir
-            </Button>
+            </Button> }
         </Flex>  
         <Button mt={2} mb={2} onClick={handleCopyClick} as={Link} leftIcon={<FaShareAlt/>} variant='link'><Text decoration={"underline"}>Copy Link untuk Teman/Kurir</Text></Button>
     </Box>

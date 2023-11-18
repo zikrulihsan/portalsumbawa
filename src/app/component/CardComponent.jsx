@@ -5,10 +5,18 @@ import { FaFire, FaMapMarkerAlt, FaPhone, FaStar, FaWhatsapp } from 'react-icons
 
 const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber, title, highlight, description, operationalTime, location, operationalDay, onCtaClick}, ...props) => {
 
-  const redirectToLocation = (location) => {
-    // Redirect logic here
-    window.open(location, '_blank');
+  const redirectToLocation = (address) => {
+    let validAddress = address
+    if(address.startsWith("https://api.whatsapp.com") && !validatePhoneNumber())
+        validAddress = "tel:" + waNumber
+
+    window.open(validAddress, '_blank'); 
+
   };
+
+  const validatePhoneNumber = () => {
+    return waNumber.slice(2) == "08" || waNumber.slice(3) == "628"
+  }
 
   const redirectToPage = (page) => {
     if(isPriority) return
@@ -28,7 +36,7 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
     return data == "-" || data == "" || data == null || data == undefined
   }
   const waMessage = isEmpty(waNumber) 
-                      ? `Halo Admin, mohon bantuannya untuk mencarikan nomor telepon ${title.toString()}.` 
+                      ? `Halo Admin, mohon bantuannya untuk mencarikan info lebih lanjut tentang ${title.toString()}.` 
                       : "Halo, saya dapat nomornya dari Portal Sumbawa, boleh tanya tentang produknya?"
   
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + convertedWaNumber() + "&text=" + waMessage
@@ -63,7 +71,10 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
         
           <Flex alignItems={"center"} gap={1}  mb={2}>
             <Box><FaMapMarkerAlt size={16}/></Box>
-            <Text href={addressLink} target="_blank" rel="noopener noreferrer">{location}</Text>
+            {!isEmpty(location) 
+              ? <Text href={addressLink} target="_blank" rel="noopener noreferrer">{location}</Text> 
+              : <Text color={"gray"}>Alamat belum terdata</Text>}
+            
           </Flex>
         {isEmpty(operationalDay) && isEmpty(operationalTime) 
           ? <></> 
@@ -87,7 +98,7 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
             width="full" 
             rightIcon={<FaPhone/>} 
             colorScheme="red"
-            onClick={() => redirectToLocation(`tel:${waNumber}`)}>Hubungi Sekarangs </Button>}
+            onClick={() => redirectToLocation(`tel:${waNumber}`)}>Hubungi Sekarang</Button>}
         {!isHotel() && !isPriority && !isEmpty(waNumber) && !isKurir() ?
           <Button 
             width="full" 
@@ -95,7 +106,7 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
             variant="outline" 
             onClick={()=> {redirectToLocation("https://linktr.ee/PortalSumbawa")}}
             leftIcon={<FaWhatsapp/>}>
-              Pesan Via Kurir``
+              Pesan Via Kurir
           </Button> : isPriority || isKurir() ? <></> :
               <Box>
                 <Text fontSize={10} mt={1} mb={2}>Nomor Telepon/WA Pengguna Masih Belum tersedia, <a>Hubungi Admin</a> Untuk Pembaruan Data</Text>
