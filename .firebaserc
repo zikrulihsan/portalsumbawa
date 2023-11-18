@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "react-app-c803f"
-  }
+    "default": "portalsumbawa-9038b",
+    "production": "portalsumbawa-9038b"
+  },
+  "targets": {},
+  "etags": {}
 }
