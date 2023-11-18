@@ -1,5 +1,5 @@
-import { Box, Heading, Flex, Link, Text, useBoolean } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { Box, Heading, Flex, Link, Text, useBoolean, Spinner } from '@chakra-ui/react';
+import { useState, useRef, useEffect } from 'react';
 import SearchComponent from '../component/Search';
 
 import CardComponent from '../component/CardComponent';
@@ -10,16 +10,28 @@ export default function Homepage(props) {
   const [data, setData] = useState([]);
   const [masterData, setMasterData] = useState([])
   const [isSearchEmpty, setIsSearchEmpty] = useState("");
+  const [isLoading, setIsLoading] = useState(true)
+
+  const cardRef = useRef(null)
 
   const fetchData = async () => {
-    let tempData = [];
-    const querySnapshot = await getDocs(collection(db, "umkm"));
-    querySnapshot.forEach((doc) => {
-      tempData.push({"id": doc.id, ...doc.data()})
-    });
+    setIsLoading(true)
 
-    setData(tempData.filter(item => item.isPriority == true));
-    setMasterData(tempData);
+    try {
+      let tempData = [];
+      const querySnapshot = await getDocs(collection(db, "umkm"));
+      querySnapshot.forEach((doc) => {
+        tempData.push({"id": doc.id, ...doc.data()})
+      });
+  
+      setData(tempData.filter(item => item.isPriority == true));
+      setMasterData(tempData);
+    } catch (error) {
+      
+    } finally {
+      setIsLoading(false)
+    }
+   
   };
 
   const filter = async (query) => {
@@ -28,6 +40,12 @@ export default function Homepage(props) {
     else 
       setData(masterData.filter(item => item.isPriority == true));
   }
+  const handleInputFocus = () => {
+    // Scroll to the input element when it gains focus
+    cardRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  
 
   useEffect(() => {
     fetchData();
@@ -37,20 +55,24 @@ export default function Homepage(props) {
     <Flex
       flexDirection="column"
       justifyContent="flex-start"
-      alignItems="space-between"
+      alignItems="center"
       textAlign="center"
       width="100%"
       height={"100vh"}
-    >
+    > 
       <Box ml="8" mr="8">
       <Heading as="h1" mt="16" fontSize={32}>Halo Sanak,</Heading>
       <Text fontSize={36} mb="8">mau cari apa sih hari ini?</Text>
       
       <SearchComponent
         onSearch={filter}
+        handleInputFocus={handleInputFocus}
         />
-      
-      {data.map((item, index) => (
+        <Box
+          ref={cardRef}
+        >
+      {isLoading ? <Spinner mt="16" size="xl"/> :
+      data.map((item, index) => (
        <CardComponent
         key={item.id}
         id={item.id}
@@ -66,6 +88,7 @@ export default function Homepage(props) {
         isPriority={item.isPriority}
       />
       ))}
+      </Box>
       
       </Box>
   </Flex>
