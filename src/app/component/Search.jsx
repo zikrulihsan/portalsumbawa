@@ -33,7 +33,8 @@ const SearchComponent = ({ onSearch }) => {
 
   return (
     <InputGroup >
-      <Input
+      <Input 
+        width={"100vw"}
         ref={inputRef}
         type="text"
         placeholder="Cari Sate Ayam, Es kristal, kurir, dll"

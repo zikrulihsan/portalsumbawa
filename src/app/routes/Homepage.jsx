@@ -80,17 +80,13 @@ export default function Homepage(props) {
   }, []);
 
   return (
-    <Flex
-      flexDirection="column"
-      justifyContent="space-between"
-      alignItems="center"
+    <Box
       textAlign="center"
-      width="100%"
       height={"100vh"}
       py={4}
     > 
-      <Box ml="8" mr="8" pt={8}>
-      <Heading as="h1" mt="16" fontSize={24}>Halo Sanak,</Heading>
+      <Box mx={8} pt={8}>
+      <Heading as="h1" mt="12" fontSize={24}>Halo Sanak,</Heading>
       <Text fontSize={24} >mau cari apa hari ini?</Text>
 
       <Text fontSize={14} mx="8" mb="8">Cari data yang anda butuhkan <br />di Portal Data #1 di Sumbawa.</Text>
@@ -131,14 +127,21 @@ export default function Homepage(props) {
             <Button onClick={()=> onGotoExternalLink(whatsappLink)} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
           </Box>}
         </Box>}
-
       </Box>
       {searchQuery != "" ? <></> :
-      <Box>
-        <Text fontWeight={500} fontSize={12}>Ingin menjadi bagian dari pengembangan<br />  Portal Data Sumbawa? </Text>
-        <Button mt={2} onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"} >Jadi Kontributor Portal Data</Button>
+      <Box 
+        width={"100%"}
+        position={"fixed"}
+        bottom={8}
+        right={0}
+        left={0}
+        mt="24"
+        textAlign="center">
+        <Box>
+          <Text fontWeight={500} fontSize={12}>Ingin menjadi bagian dari pengembangan<br />  Portal Data Sumbawa? </Text>
+          <Button mt={2} onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"} >Jadi Kontributor Portal Data</Button>
+        </Box>
       </Box>}
-      
-  </Flex>
+    </Box>
   );
 }
