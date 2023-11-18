@@ -12,14 +12,11 @@ export default function Homepage(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
 
-  const onClickDataNotFound = (location) => {
+  const onGotoExternalLink = (location) => {
     // Redirect logic here
     window.open(location, '_blank');
   };
-  const orderMessage = "Halo Admin, saya mencari " + searchQuery + " tapi tidak ditemukan, boleh bantuannya untuk dicarikan datanya?";
-  
-  const whatsappLink = "https://api.whatsapp.com/send/?phone=" + "628338588078" + "&text=" + encodeURI(orderMessage)
-  
+  const formLink = "https://docs.google.com/forms/d/e/1FAIpQLScU7bvfx9pVy5esZAB7ptFUQrjdWh5kR3xg96kGcTc4WE81Dw/viewform"
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -100,7 +97,7 @@ export default function Homepage(props) {
         >
           <Heading fontSize={18}>Maaf Sanak, <br />Data belum tersedia.</Heading>
           <Text my={2} px={4}>Kabarkan ke tim Sumbawa Portal untuk membantu anda mencari data yang diperlukan.</Text>
-          <Button onClick={onClickDataNotFound} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
+          <Button onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
         </Box>}
       </Box>
       
