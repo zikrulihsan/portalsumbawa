@@ -15,11 +15,10 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
   };
 
   const validatePhoneNumber = () => {
-    return waNumber.substring(0, 2).toString() == "08" || waNumber.substring(0, 3) == "628"
+    return convertedWaNumber().substring(0, 3).toString() == "628"
   }
 
   const redirectToPage = (page) => {
-    return;
     if(isPriority) return
     window.location.href = page;
   };

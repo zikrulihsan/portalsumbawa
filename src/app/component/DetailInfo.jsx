@@ -16,7 +16,7 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
   };
   
   const validatePhoneNumber = () => {
-    return waNumber.substring(0, 2).toString() == "08" || waNumber.substring(0, 3) == "628"
+    return convertedWaNumber().substring(0, 3).toString() == "628"
   }
 
   const toast = useToast();
@@ -78,13 +78,14 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
         </Flex>
       <Text color={'teal'} mb={4}><b>Buka: </b>{!isEmpty(operationalTime) ? operationalTime + "," : "Jadwal Operasional Belum Terdata"} {operationalDay}</Text> 
         <Text mb={2}>Category:</Text>
+        {!isEmpty(tags) &&
         <Box mb={4}>
             {tags.map((tag, index) => (
                 <Tag key={index} mr={2} mb={2}>
                     {tag}
                 </Tag>
         ))}
-        </Box>  
+        </Box>}
     {medsosLink != "-" && medsosLink != "" &&
         <Button 
             bgColor='facebook.500' 
