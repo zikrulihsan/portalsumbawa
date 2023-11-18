@@ -83,9 +83,11 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
                 Chat Pemilik
             </Button>
           </Box>
-        : <Flex gap="2" bgColor={'#E53E3E'} color="white" alignItems="center" py="2" borderRadius={4} justifyContent="center"> 
-          <FaPhone/><a href={`tel:${waNumber}`}>Hubungi Sekarang</a>
-        </Flex>}
+        : <Button 
+            width="full" 
+            rightIcon={<FaPhone/>} 
+            colorScheme="red"
+            onClick={() => redirectToLocation(`tel:${waNumber}`)}>Hubungi Sekarangs </Button>}
         {!isHotel() && !isPriority && !isEmpty(waNumber) && !isKurir() ?
           <Button 
             width="full" 
@@ -93,7 +95,7 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
             variant="outline" 
             onClick={()=> {redirectToLocation("https://linktr.ee/PortalSumbawa")}}
             leftIcon={<FaWhatsapp/>}>
-              Pesan Via Kurir
+              Pesan Via Kurir``
           </Button> : isPriority || isKurir() ? <></> :
               <Box>
                 <Text fontSize={10} mt={1} mb={2}>Nomor Telepon/WA Pengguna Masih Belum tersedia, <a>Hubungi Admin</a> Untuk Pembaruan Data</Text>
