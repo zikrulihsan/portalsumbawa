@@ -15,10 +15,11 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
   };
 
   const validatePhoneNumber = () => {
-    return waNumber.slice(2) == "08" || waNumber.slice(3) == "628"
+    return waNumber.substring(0, 2).toString() == "08" || waNumber.substring(0, 3) == "628"
   }
 
   const redirectToPage = (page) => {
+    return;
     if(isPriority) return
     window.location.href = page;
   };
@@ -29,7 +30,10 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
 
   const convertedWaNumber = () => {
     if(isEmpty(waNumber)) return '6282338588078';
-    return '62' + waNumber.slice(1);
+    if(waNumber.substring(0, 2).toString() == "08")
+      return '62' + waNumber.slice(1);
+
+    return waNumber
   }
   
   const isEmpty = (data) => {
@@ -116,7 +120,7 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
                   onClick={()=> {redirectToLocation(whatsappLink)}}
                   variant={"outline"}
                   leftIcon={<FaWhatsapp/>}>
-                  Hubungi Admin Portal Sumbawa
+                  Hubungi Admin
                 </Button>
               </Box>
         } 

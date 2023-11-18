@@ -151,7 +151,7 @@ export default function Homepage(props) {
                   textDecoration={'underline'}
                   onClick={()=> {onGotoExternalLink(whatsappLinkContributor)}}
                   variant={"link"}>
-                  Hubungi Admin Portal Sumbawa
+                  Hubungi Admin
                 </Button>
         </Box>
       </Box>}

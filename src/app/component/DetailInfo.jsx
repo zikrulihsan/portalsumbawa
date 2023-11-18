@@ -16,7 +16,7 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
   };
   
   const validatePhoneNumber = () => {
-    return waNumber.slice(2) == "08" || waNumber.slice(3) == "628"
+    return waNumber.substring(0, 2).toString() == "08" || waNumber.substring(0, 3) == "628"
   }
 
   const toast = useToast();
@@ -43,7 +43,10 @@ const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, d
 
   const convertedWaNumber = () => {
     if(isEmpty(waNumber)) return '6282338588078';
-    return '62' + waNumber.slice(1);
+    if(waNumber.substring(0, 2).toString() == "08")
+      return '62' + waNumber.slice(1);
+
+    return waNumber
   }
   
   const isEmpty = (data) => {
