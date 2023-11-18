@@ -27,10 +27,9 @@ function App() {
       <Stack
         spacing={14}
       >
-        <Text>Halo</Text>
         <CustomAppBar/>
       
-        <Homepage /> 
+        <Homepage/> 
         
       </Stack>
     </Box>

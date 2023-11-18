@@ -4,7 +4,7 @@ import { Box, Flex, Icon, Heading, Text, Tag, Button, VStack, propNames } from '
 import { FaFire, FaMapMarkerAlt, FaPhone, FaStar, FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const CardComponent = ({ id, addressLink, isPriority, waNumber, title, highlight, description, operationalTime, location, operationalDay, onCtaClick}, ...props) => {
+const CardComponent = ({ id, index, addressLink, isPriority, waNumber, title, highlight, description, operationalTime, location, operationalDay, onCtaClick}, ...props) => {
   
   const redirectToLocation = (location) => {
     // Redirect logic here
@@ -21,7 +21,7 @@ const CardComponent = ({ id, addressLink, isPriority, waNumber, title, highlight
         borderRadius="lg"
         overflow="hidden"
         p={4}
-        mt={4}
+        mt={index == 0 ? 2 :4}
         boxShadow="md"
         align="left"
         >
@@ -33,24 +33,27 @@ const CardComponent = ({ id, addressLink, isPriority, waNumber, title, highlight
           
         </Flex>
         <Text color={'grey'} fontSize={16} mb={4}>{highlight}</Text>
-        <Text mb={4}>{isPriority ? <></> : <b>Menyediakan:</b>} {description}</Text>
+        {isPriority ? <></> : 
+        <Box><Text mb={4}>{ <b>Menyediakan:</b>} {description}</Text>
         
-        {!isPriority &&
           <Flex alignItems={"center"} gap={1}  mb={2}>
             <Box><FaMapMarkerAlt size={16}/></Box>
             <a href={addressLink} target="_blank" rel="noopener noreferrer">{location}</a>
-          </Flex>}
-        <Text color={isPriority ? 'black' : 'teal'}  mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text>
-        
+          </Flex>
+        <Text color={isPriority ? 'black' : 'teal'}  mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text> 
+        </Box>
+        }
           
+        {!isPriority ?
         <Button 
           width="full" 
-          colorScheme={isPriority ? 'red' : 'teal'} 
+          colorScheme={'teal'} 
           mb={2} 
           onClick={()=> {redirectToLocation(whatsappLink)}}
-          leftIcon={isPriority ? <FaPhone/> : <FaWhatsapp/>}>
-            {isPriority ? `Hubungi Sekarang`: "Chat Penjual"}
-        </Button>
+          leftIcon={<FaWhatsapp/>}>Chat Pemilik</Button>
+        : <Flex gap="2" bgColor={'#E53E3E'} color="white" alignItems="center" py="2" borderRadius={4} justifyContent="center"> 
+          <FaPhone/><a href="tel:+123456789">Hubungi Kami</a>
+        </Flex>}
         {!isPriority &&
           <Button 
             width="full" 

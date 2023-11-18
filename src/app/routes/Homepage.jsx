@@ -1,4 +1,4 @@
-import { Box, Heading, Flex, Link, Text, useBoolean, Spinner } from '@chakra-ui/react';
+import { Box, Heading, Flex, Link, Text, useBoolean, Spinner, Button } from '@chakra-ui/react';
 import { useState, useRef, useEffect } from 'react';
 import SearchComponent from '../component/Search';
 
@@ -9,10 +9,17 @@ import { query, collection, where, doc, setDoc, getDocs,  } from "firebase/fires
 export default function Homepage(props) {
   const [data, setData] = useState([]);
   const [masterData, setMasterData] = useState([])
-  const [isSearchEmpty, setIsSearchEmpty] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
 
-  const cardRef = useRef(null)
+  const onClickDataNotFound = (location) => {
+    // Redirect logic here
+    window.open(location, '_blank');
+  };
+  const orderMessage = "Halo Admin, saya mencari " + searchQuery + " tapi tidak ditemukan, boleh bantuannya untuk dicarikan datanya?";
+  
+  const whatsappLink = "https://api.whatsapp.com/send/?phone=" + "628338588078" + "&text=" + encodeURI(orderMessage)
+  
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -35,17 +42,15 @@ export default function Homepage(props) {
   };
 
   const filter = async (query) => {
-    if(query != "")
-      setData(masterData.filter(item => item.services.toLowerCase().includes(query.toLowerCase())));
-    else 
+    if(query != "") {
+      setSearchQuery(query)
+      setData(masterData.filter(item => item.services.toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
+    }
+      else {
+      setSearchQuery(setSearchQuery)
       setData(masterData.filter(item => item.isPriority == true));
+    }
   }
-  const handleInputFocus = () => {
-    // Scroll to the input element when it gains focus
-    cardRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  
 
   useEffect(() => {
     fetchData();
@@ -59,23 +64,26 @@ export default function Homepage(props) {
       textAlign="center"
       width="100%"
       height={"100vh"}
+      mt={16}
     > 
       <Box ml="8" mr="8">
       <Heading as="h1" mt="16" fontSize={32}>Halo Sanak,</Heading>
-      <Text fontSize={36} mb="8">mau cari apa sih hari ini?</Text>
+      <Text fontSize={36} >mau cari apa hari ini?</Text>
+
+      <Text fontSize={14} mx="8" mb="8">Cari yang anda butuhkan <br />di Portal Data #1 di Sumbawa.</Text>
       
       <SearchComponent
         onSearch={filter}
-        handleInputFocus={handleInputFocus}
         />
-        <Box
-          ref={cardRef}
-        >
+      <Box>
       {isLoading ? <Spinner mt="16" size="xl"/> :
-      data.map((item, index) => (
+      data.length > 0 ? <Box>
+      {searchQuery == "" ? <Text color="grey" mt={4} fontSize={14}>Atau hubungi nomor darurat di bawah ini:</Text> : <></>}
+      {data.map((item, index) => (
        <CardComponent
         key={item.id}
         id={item.id}
+        index={index}
         addressLink={item.addressLink}
         waNumber={item.phoneNumber}
         title={item.name}
@@ -87,7 +95,13 @@ export default function Homepage(props) {
         onCtaClick={()=>{}}
         isPriority={item.isPriority}
       />
-      ))}
+      ))} </Box> : <Box 
+          mt={16}
+        >
+          <Heading fontSize={18}>Maaf Sanak, <br />Data belum tersedia.</Heading>
+          <Text my={2} px={4}>Kabarkan ke tim Sumbawa Portal untuk membantu anda mencari data yang diperlukan.</Text>
+          <Button onClick={onClickDataNotFound} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
+        </Box>}
       </Box>
       
       </Box>
