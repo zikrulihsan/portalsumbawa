@@ -4,7 +4,7 @@ import { Box, Flex, Icon, Heading, Text, Tag, Button, VStack, propNames } from '
 import { FaFire, FaMapMarkerAlt, FaPhone, FaStar, FaWhatsapp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const CardComponent = ({ id, isPriority, waNumber, title, highlight, description, operationalTime, location, operationalDay, onCtaClick}, ...props) => {
+const CardComponent = ({ id, addressLink, isPriority, waNumber, title, highlight, description, operationalTime, location, operationalDay, onCtaClick}, ...props) => {
   
   const redirectToLocation = (location) => {
     // Redirect logic here
@@ -15,7 +15,7 @@ const CardComponent = ({ id, isPriority, waNumber, title, highlight, description
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + waNumber + "&text=" + encodeURI(orderMessage)
   
   return (
-    <Link to={isPriority ? '' : `/detailPage?itemId=${id}`}>
+    <Link to={isPriority ? '' : `/detailPage/${id}`}>
       <Box
         borderWidth="1px"
         borderRadius="lg"
@@ -38,7 +38,7 @@ const CardComponent = ({ id, isPriority, waNumber, title, highlight, description
         {!isPriority &&
           <Flex alignItems={"center"} gap={1}  mb={2}>
             <Box><FaMapMarkerAlt size={16}/></Box>
-            <Link>{location}</Link>
+            <a href={addressLink} target="_blank" rel="noopener noreferrer">{location}</a>
           </Flex>}
         <Text color={isPriority ? 'black' : 'teal'}  mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text>
         

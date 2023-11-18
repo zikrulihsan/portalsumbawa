@@ -54,6 +54,7 @@ export default function Homepage(props) {
        <CardComponent
         key={item.id}
         id={item.id}
+        addressLink={item.addressLink}
         waNumber={item.phoneNumber}
         title={item.name}
         highlight={""}

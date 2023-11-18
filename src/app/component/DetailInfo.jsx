@@ -4,7 +4,7 @@ import {  Box, Icon, Heading, Flex, Link, Text, Tag, Button, VStack, useToast } 
 import { FaFacebook, FaInstagram, FaMapMarkerAlt, FaShareAlt, FaWhatsapp } from 'react-icons/fa';
 import copy from 'clipboard-copy';
 
-const DetailInfo = ({ id, medsosLink, waNumber, title, highlight, description, tags, operationalTime, location, operationalDay, onCtaClick}) => {
+const DetailInfo = ({ id, addressLink, medsosLink, waNumber, title, highlight, description, tags, operationalTime, location, operationalDay, onCtaClick}) => {
   
   const redirectToLocation = (location) => {
     // Redirect logic here
@@ -15,7 +15,7 @@ const DetailInfo = ({ id, medsosLink, waNumber, title, highlight, description, t
 
   const handleCopyClick = async () => {
     try {
-      await copy("http://localhost:3000/detailPage?itemId=" + id);
+      await copy(window.location.href);
       toast({
         title: 'Link Siap Dibagikan Ke Kurir!',
         description: `Silahkan bagikan link ini untuk melihat detail penjual`,
@@ -42,7 +42,7 @@ const DetailInfo = ({ id, medsosLink, waNumber, title, highlight, description, t
       <Text mb={4}><b>Menyediakan:</b> {description}</Text>
       <Flex alignItems={"center"} gap={1}  mb={2}>
             <Box><FaMapMarkerAlt size={16}/></Box>
-            <Link>{location}</Link>
+            <a href={addressLink} target="_blank" rel="noopener noreferrer">{location}</a>
         </Flex>
       <Text color={'teal'} mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text> 
         <Text mb={2}>Category:</Text>

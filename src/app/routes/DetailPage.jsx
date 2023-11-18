@@ -8,14 +8,12 @@ import {
   } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import DetailInfo from '../component/DetailInfo';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import db from '../firebase'
 import { collection, getDoc, doc } from "firebase/firestore"; 
 
 export default function DetailPage() {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const itemId = searchParams.get('itemId');
+    const {itemId} = useParams();
 
     const [item, setItem] = useState({});
     const [isSearchEmpty, setIsSearchEmpty] = useState("");
@@ -78,7 +76,7 @@ export default function DetailPage() {
             height="100vh"
         >
           <DetailInfo
-              id={itemId}
+              //id={itemId}
               waNumber={item.phoneNumber}
               title={item.name}
               highlight={""}
@@ -86,6 +84,7 @@ export default function DetailPage() {
               description={item.services}
               operationalDay={item.operationalDay}
               location={item.address}
+              addressLink={item.addressLink}
               medsosLink={item.mediaSocialLink}
               operationalTime={item.operationalTime}
               onCtaClick={()=>{}}
