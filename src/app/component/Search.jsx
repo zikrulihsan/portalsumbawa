@@ -1,10 +1,11 @@
 // SearchComponent.js
 import React, { useRef, useState } from 'react';
 import { Input, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
-import { FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
+import { FaCheck, FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
 
 const SearchComponent = ({ onSearch }) => {
   const inputRef = useRef(null)
+  const [isFocus, setIsFocus] = useState(false)
 
   const [querySearch, setQuerySearch] = useState("")
 
@@ -16,7 +17,19 @@ const SearchComponent = ({ onSearch }) => {
   const handleInputFocus = () => {
     // Scroll to the input element when it gains focus
     inputRef.current.scrollIntoView({ behavior: 'smooth'});
+    setIsFocus(true)
   };
+
+  const handleInputIconClick = () => {
+    if(isFocus) {
+      setIsFocus(false)
+      inputRef.current.blur()
+    } else {
+      handleSearch("")
+      setIsFocus(true)
+      inputRef.current.focus()
+    }
+  }
 
   return (
     <InputGroup >
@@ -31,8 +44,8 @@ const SearchComponent = ({ onSearch }) => {
       <InputRightElement>
         <IconButton
           aria-label="Search"
-          icon={ querySearch == "" ? <FaSearchLocation /> : <FaWindowClose/>}
-          onClick={() => handleSearch("")}
+          icon={ querySearch == "" ? <FaSearchLocation /> : isFocus ? <FaCheck color="teal"/> : <FaWindowClose/>}
+          onClick={handleInputIconClick}
           variant="outline"
         />
         

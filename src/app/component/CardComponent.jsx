@@ -15,8 +15,12 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
     window.location.href = page;
   };
 
+  const isKurir = () => {
+    return description.toLowerCase().includes("kurir")
+  }
+
   const convertedWaNumber = () => {
-    if(isEmpty(waNumber)) return '628338588078';
+    if(isEmpty(waNumber)) return '6282338588078';
     return '62' + waNumber.slice(1);
   }
   
@@ -24,16 +28,47 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
     return data == "-" || data == "" || data == null || data == undefined
   }
   const waMessage = isEmpty(waNumber) 
-                      ? "Halo Admin, nomor telepon " + title + " belum tersedia, bisa minta bantuannya?" 
+                      ? `Halo Admin, mohon bantuannya untuk mencarikan nomor telepon ${title.toString()}.` 
                       : "Halo, saya dapat nomornya dari Portal Sumbawa, boleh tanya tentang produknya?"
   
-  const whatsappLink = "https://api.whatsapp.com/send/?phone=" + convertedWaNumber() + "&text=" + encodeURI(waMessage)
+  const whatsappLink = "https://api.whatsapp.com/send/?phone=" + convertedWaNumber() + "&text=" + waMessage
   
   const isHotel = () => {
     if(category != undefined && category.length > 0)
       return category[0].includes("Hotel")
     else return false
   }
+
+
+  const renderOrderViaCourierButton = () => (
+    <Button 
+      width="full" 
+      colorScheme="teal" 
+      variant="outline" 
+      onClick={() => redirectToLocation("https://linktr.ee/PortalSumbawa")}
+      leftIcon={<FaWhatsapp/>}
+    >
+      Pesan Via Kurir
+    </Button>
+  );
+
+  const renderContactAdminButton = () => (
+    <Box>
+      <Text fontSize={10} mt={1} mb={2}>
+        Nomor Telepon/WA Pengguna Masih Belum tersedia, <a>Hubungi Admin</a> Untuk Pembaruan Data
+      </Text>
+      <Button 
+        width="full" 
+        colorScheme="teal" 
+        onClick={() => redirectToLocation(whatsappLink)}
+        variant="outline"
+        leftIcon={<FaWhatsapp/>}
+      >
+        Hubungi Admin Portal Sumbawa
+      </Button>
+    </Box>
+  );
+
 
   return (
       <Box
@@ -46,8 +81,8 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
         align="left"
         onClick={() => redirectToPage('/detailPage/'+id)}
         >
-        <Flex justifyContent={'space-between'}>
-          <Heading as="h2" size="md" mb={2}>{title}</Heading>
+        <Flex justifyContent={'space-between'} gap={8}>
+          <Heading as="h2" size="md" mb={2} fontSize={18}>{title}</Heading>
           {isPriority && <Box>
             <FaFire color="gold" size={24}/>
           </Box>}
@@ -69,7 +104,6 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
           
         {!isPriority ?
           <Box>
-            {!isEmpty(waNumber) ?
             <Button 
               width="full" 
               colorScheme={'teal'} 
@@ -78,36 +112,17 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
               onClick={()=> {redirectToLocation(whatsappLink)}}
               leftIcon={<FaWhatsapp/>}>
                 Chat Pemilik
-            </Button> : <></> }
-            {!isEmpty(waNumber) ? <></> :
-              <Box>
-                <Button 
-                  width="full" 
-                  colorScheme={'teal'} 
-                  onClick={()=> {redirectToLocation(whatsappLink)}}
-                  leftIcon={<FaWhatsapp/>}>
-                  Hubungi Admin
-                </Button>
-                <Text fontSize={10} mt={1} mb={2}>Nomor Telepon/WA Pengguna Masih Belum tersedia, <a>Hubungi Admin</a> Untuk Pembaruan Data</Text>
-              </Box>
-          }
+            </Button>
           </Box>
         : <Flex gap="2" bgColor={'#E53E3E'} color="white" alignItems="center" py="2" borderRadius={4} justifyContent="center"> 
-          <FaPhone/><a href="tel:+123456789">Hubungi Kami</a>
+          <FaPhone/><a href={waNumber}>Hubungi Sekarang</a>
         </Flex>}
-        {!isPriority && !isHotel() &&
-          <Button 
-            width="full" 
-            colorScheme={'teal'} 
-            variant="outline" 
-            onClick={()=> {redirectToLocation("https://linktr.ee/PortalSumbawa")}}
-            leftIcon={<FaWhatsapp/>}>
-              Pesan Via Kurir
-          </Button>
-        } 
+        {!isHotel() && !isPriority && !isEmpty(waNumber) && !isKurir() && renderOrderViaCourierButton()}
+        {!isPriority && !isKurir() && renderContactAdminButton()}
 
       </Box>
   );
 };
+
 
 export default CardComponent;
