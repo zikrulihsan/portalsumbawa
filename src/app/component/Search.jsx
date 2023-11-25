@@ -3,9 +3,9 @@ import React, { useRef, useState } from 'react';
 import { Text, Box, Input, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
 import { FaCheck, FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
 
-const SearchComponent = ({ onSearch }) => {
-  const inputRef = useRef(null)
-  const [isFocus, setIsFocus] = useState(false)
+const SearchComponent = ({ onSearch, inputRef }) => {
+  
+  const [isFocus, setIsFocus] = useState(true)
   const [isBlur, setIsBlur] = useState(false)
 
   const [querySearch, setQuerySearch] = useState("")
@@ -49,6 +49,7 @@ const SearchComponent = ({ onSearch }) => {
       <InputGroup >
         <Input 
           width={"100vw"}
+          borderWidth="2"
           ref={inputRef}
           type="text"
           placeholder="Cari nama tempat/produk/layanan di Sumbawa"

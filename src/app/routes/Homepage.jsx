@@ -16,6 +16,7 @@ export default function Homepage(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
   const [isExpanded, setIsExpanded] = useState(false)
+  const inputRef = useRef(null)
 
   const onGotoExternalLink = (location) => {
     // Redirect logic here
@@ -65,7 +66,9 @@ export default function Homepage(props) {
       }, 500); 
       setTimeout(() => {
         setIsExpanded(false)
+        inputRef.current.focus()
       }, 2000); 
+
     }
    
   };
@@ -95,7 +98,7 @@ export default function Homepage(props) {
 
   useEffect(() => {
     fetchData();
-    
+  
   }, []);
 
   return (
@@ -108,6 +111,7 @@ export default function Homepage(props) {
  
       <SearchComponent
         onSearch={filter}
+        inputRef={inputRef}
         />
 
       {isLoading ? <Spinner mt="16" size="xl"/> :

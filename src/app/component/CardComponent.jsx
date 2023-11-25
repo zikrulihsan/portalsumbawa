@@ -122,6 +122,8 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
                   colorScheme={'teal'} 
                   onClick={()=> {redirectToLocation(whatsappLink)}}
                   variant={"outline"}
+                  fontSize="12"
+                  size={"sm"}
                   leftIcon={<FaWhatsapp/>}>
                   Hubungi Admin
                 </Button>
