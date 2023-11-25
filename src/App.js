@@ -1,6 +1,6 @@
 
 import './App.css';
-import { ChakraProvider, Text } from '@chakra-ui/react';
+import { ChakraProvider, Text, VStack } from '@chakra-ui/react';
 import {
   Box,
   Stack,
@@ -11,29 +11,25 @@ import Homepage from './app/routes/Homepage';
 
 function App() {
   return (
-    <Box
-    display="flex"
-    justifyContent="center"
-    bgColor="gray.200"
-  >
-    <Box
-      minWidth="375px"
-      width={{ base: '100%', md: '380px' }}
-      borderColor="gray.200"
-      minHeight="200px"
-      position="relative"
-      bg="white"
+    <VStack
+      bg="gray.200"
     >
-      <Stack
-        spacing={14}
+      <Box
+        minWidth="375px"
+        width={{ base: '100%', md: '380px' }}
+        borderColor="gray.200"
+        bg="white"
       >
-        <CustomAppBar/>
-      
-        <Homepage/> 
+        <Stack
+          spacing={14}
+        >
+          <CustomAppBar/>
         
-      </Stack>
-    </Box>
-  </Box>
+          <Homepage/> 
+          
+        </Stack>
+      </Box>
+    </VStack>
   );
 }
 

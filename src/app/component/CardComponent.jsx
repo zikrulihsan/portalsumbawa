@@ -44,10 +44,9 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
   
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + convertedWaNumber() + "&text=" + waMessage
   
-  const isHotel = () => {
-    if(category != undefined && category.length > 0)
-      return category[0].includes("Hotel")
-    else return false
+  const isService = () => {
+    let desc = description ?? ""
+    return !isPriority && desc.toLowerCase().includes("hotel") || desc.toLowerCase().includes("servis") || desc.toLowerCase().includes("service")
   }
 
   return (
@@ -62,26 +61,25 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
         onClick={() => redirectToPage('/detailPage/'+id)}
         >
         <Flex justifyContent={'space-between'} gap={8}>
-          <Heading as="h2" size="md" mb={2} fontSize={18}>{title}</Heading>
+          <Heading as="h2" size="md" mb={2} fontSize="14">{title}</Heading>
           {isPriority && <Box>
             <FaFire color="gold" size={24}/>
           </Box>}
           
         </Flex>
-        <Text color={'grey'} fontSize={16} mb={4}>{highlight}</Text>
         {isPriority ? <></> : 
-        <Box><Text mb={4}>{ <b>Menyediakan:</b>} {description}</Text>
+        <Box><Text fontSize="12" mb={4}>{ <b>Menyediakan:</b>} {description}</Text>
         
           <Flex alignItems={"center"} gap={1}  mb={2}>
             <Box><FaMapMarkerAlt size={16}/></Box>
             {!isEmpty(location) 
-              ? <Text href={addressLink} target="_blank" rel="noopener noreferrer">{location}</Text> 
-              : <Text color={"gray"}>Alamat belum terdata</Text>}
+              ? <Text fontSize="12" href={addressLink} target="_blank" rel="noopener noreferrer">{location}</Text> 
+              : <Text fontSize="12" color={"gray"}>Alamat belum terdata</Text>}
             
           </Flex>
         {isEmpty(operationalDay) && isEmpty(operationalTime) 
           ? <></> 
-          : <Text color={isPriority ? 'black' : 'teal'}  mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text>}
+          : <Text color={isPriority ? 'black' : 'teal'} fontSize="12"  mb={4}><b>Buka: </b>{operationalTime}, {operationalDay}</Text>}
         </Box>
         }
           
@@ -89,8 +87,10 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
           <Box>
             <Button 
               width="full" 
-              colorScheme={'teal'} 
-              mb={2} 
+              colorScheme={'teal'}  
+              fontSize="12"
+              size={"sm"}
+              mb="2"
               isDisabled={isEmpty(waNumber)}
               onClick={()=> {redirectToLocation(whatsappLink)}}
               leftIcon={<FaWhatsapp/>}>
@@ -99,18 +99,22 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
           </Box>
         : <Button 
             width="full" 
+            fontSize="12"
+            size={"sm"}
             rightIcon={<FaPhone/>} 
             colorScheme="red"
             onClick={() => redirectToLocation(`tel:${waNumber}`)}>Hubungi Sekarang</Button>}
-        {!isHotel() && !isPriority && !isEmpty(waNumber) && !isKurir() ?
+        {!isService() && !isPriority && !isEmpty(waNumber) && !isKurir() ?
           <Button 
             width="full" 
             colorScheme={'teal'} 
             variant="outline" 
+            fontSize="12"
+            size={"sm"}
             onClick={()=> {redirectToLocation("https://linktr.ee/PortalSumbawa")}}
             leftIcon={<FaWhatsapp/>}>
               Pesan Via Kurir
-          </Button> : isPriority || isKurir() ? <></> :
+          </Button> : isPriority || isKurir() || isService() ? <></> :
               <Box>
                 <Text fontSize={10} mt={1} mb={2}>Nomor Telepon/WA Pengguna Masih Belum tersedia, <a>Hubungi Admin</a> Untuk Pembaruan Data</Text>
                 <Button 

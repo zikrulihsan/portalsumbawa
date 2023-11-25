@@ -1,4 +1,4 @@
-import { Box, Heading, Flex, Link, Text, useBoolean, Spinner, Button } from '@chakra-ui/react';
+import { Image, Box, Heading, Flex, Link, Text, useBoolean, Spinner, Button, Collapse } from '@chakra-ui/react';
 import { useState, useRef, useEffect, version } from 'react';
 import SearchComponent from '../component/Search';
 
@@ -6,12 +6,16 @@ import CardComponent from '../component/CardComponent';
 import db from '../firebase'
 import { query, collection, where, doc, setDoc, getDocs, getDoc } from "firebase/firestore"; 
 import { ADMIN_PHONE_NUMBER } from '../constant';
+import PriorityCardComponent from '../component/PriorityCardComponent';
+import { FaArrowDown, FaChevronDown, FaChevronUp, FaExclamationTriangle, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import YouTubeVideo from '../component/YoutubeVideo';
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
   const [masterData, setMasterData] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const onGotoExternalLink = (location) => {
     // Redirect logic here
@@ -56,18 +60,28 @@ export default function Homepage(props) {
       
     } finally {
       setIsLoading(false)
+      setTimeout(() => {
+        setIsExpanded(true)
+      }, 500); 
+      setTimeout(() => {
+        setIsExpanded(false)
+      }, 2000); 
     }
    
   };
 
+  const rightExpandablesIcon = () => {
+    return isExpanded ? <FaChevronUp/> : <FaChevronDown/>
+  }
+
   const filter = async (query) => {
 
-    if(query.length < 3 && query != "") return;
+    if(query.length < 2 && query != "") return;
 
     setIsLoading(true)
     if(query != "") {
       setSearchQuery(query)
-      setData(masterData.filter(item => item.services.toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
+      setData(masterData.filter(item => !item.isPriority && (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
     }
     else {
       setSearchQuery("")
@@ -75,39 +89,51 @@ export default function Homepage(props) {
     }
     setTimeout(() => {
       setIsLoading(false)
-    }, 500);
+    }, 500); 
     
   }
 
   useEffect(() => {
     fetchData();
+    
   }, []);
 
   return (
     <Box
       textAlign="center"
-      height={"100vh"}
       py={4}
+      mt={8}
     > 
-      <Box mx={8} pt={8}>
-      <Heading as="h1" mt="12" fontSize={24}>Halo Sanak,</Heading>
-      <Text fontSize={24} >mau cari apa hari ini?</Text>
-
-      <Text fontSize={14} mx="8" mb="8">Cari data yang anda butuhkan <br />di Portal Data #1 di Sumbawa.</Text>
-      
+      <Box mx={4} pt={8}>
+ 
       <SearchComponent
         onSearch={filter}
         />
+
       {isLoading ? <Spinner mt="16" size="xl"/> :
       <Box>
         {data.length > 0 ? <Box>
-        {searchQuery.length == 0 ? 
-          <Box  mt={4}>
-            <Text color="grey" mt={4} fontSize={12}>Hubungi Nomor Di Bawah Ini Dalam Keadaan Darurat:</Text>
-          </Box>
-          : <></>}
-        {data.map((item, index) => (
-        <CardComponent
+
+        { searchQuery == "" ? 
+        <Box>
+          <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsExpanded(!isExpanded)}justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesIcon()}>Daftar Nomor Darurat Sumbawa</Button>
+          <Collapse in={isExpanded}>{data.map((item, index) => ( 
+            <PriorityCardComponent 
+              key={item.id}
+              id={item.id}
+              index={index}
+              location={item.address}
+              description={item.description}
+              waNumber={item.phoneNumber}
+              title={item.name}
+              />))}
+          </Collapse>
+          <Flex p="2"  gap="2" borderRadius={3} bgColor="rgba(250, 164, 0, 0.07)" justifyContent={"flex-start"} alignItems="center" >
+            <FaExclamationTriangle color="rgba(250, 164, 0, 1)" />
+            <Text color="rgba(250, 164, 0, 1)" fontSize={11}>Hubungi Nomor Di Atas Hanya Dalam Keadaan Darurat</Text>
+          </Flex>
+        </Box>:
+        data.map((item, index) => (<CardComponent
           key={item.id}
           id={item.id}
           index={index}
@@ -126,35 +152,26 @@ export default function Homepage(props) {
         ))} </Box> : <Box 
             mt={16}
           >
-            <Heading fontSize={18}>Maaf Sanak, <br />Data belum tersedia.</Heading>
-            <Text my={2} px={4}>Kabarkan ke tim Sumbawa Portal untuk membantu anda mencari data yang diperlukan.</Text>
-            <Button onClick={()=> onGotoExternalLink(whatsappLink)} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
+            <Heading fontSize={14}>Maaf Sanak, <br />Data belum tersedia.</Heading>
+            <Text my={2} fontSize={12} px={4}>Kabarkan ke tim Sumbawa Portal untuk membantu anda mencari data yang diperlukan.</Text>
+            <Button size={"sm"} onClick={()=> onGotoExternalLink(whatsappLink)} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
           </Box>}
         </Box>}
+        {searchQuery == "" &&
+          <Box textAlign={"left"} > 
+            <Text textAlign={"left"} color="teal" m="2" fontSize={14} fontWeight="600">Yuk Ikut Gerakan Satu Data Sumbawa!</Text>
+            <Text fontSize={12} mx="2" mb="2"> Portal Sumbawa adalah Platform Pencarian #1 Penyedia Jasa/Produk di Kabupaten Sumbawa. Karya Asli Muda Mudi Sumbawa.
+            <br/><br/>Yuk, ikuti <b>Gerakan Satu Data Sumbawa</b> Bersama Tim Portal Sumbawa untuk memudahkan Ribuan masyarakat Sumbawa.</Text>
+
+            <Flex gap={2} mb={2} ml={1}>
+              <Button variant="outline" color="teal" size={"sm"} fontSize={11} leftIcon={<FaInstagram/>}>Instagram Portal Sumbawa</Button>
+              <Button variant="outline" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>Hubungi Admin</Button>
+            </Flex>
+            <YouTubeVideo videoId={"pv_4qe5ex5Q"} /> 
+          </Box>
+          }
+        
       </Box>
-      {searchQuery != "" ? <></> :
-      <Box 
-        width={"100%"}
-        position={"fixed"}
-        bottom={8}
-        right={0}
-        left={0}
-        mt="24"
-        textAlign="center">
-        <Box>
-          <Text fontWeight={500} fontSize={12}>Ingin menjadi bagian dari pengembangan<br />  Portal Data Sumbawa? </Text>
-          <Button mt={2} onClick={()=> onGotoExternalLink(formLink)} colorScheme={"teal"} >Isi Form Kontributor Portal Data</Button>
-          <Text fontSize={14} mt={1}>Atau</Text>
-          <Button 
-                  colorScheme={'teal'} 
-                  as={Link}
-                  textDecoration={'underline'}
-                  onClick={()=> {onGotoExternalLink(whatsappLinkContributor)}}
-                  variant={"link"}>
-                  Hubungi Admin
-                </Button>
-        </Box>
-      </Box>}
     </Box>
   );
 }
