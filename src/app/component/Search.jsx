@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Text, Box, Input, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
 import { FaCheck, FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
 
-const SearchComponent = ({ searchQuery, onSearch, inputRef }) => {
+const SearchComponent = ({ searchQuery = "", onSearch, inputRef }) => {
   
   const [isFocus, setIsFocus] = useState(true)
   const [isBlur, setIsBlur] = useState(false)
@@ -45,7 +45,8 @@ const SearchComponent = ({ searchQuery, onSearch, inputRef }) => {
   }
 
   useEffect(() => {
-   handleSearch(searchQuery)
+    if(searchQuery) 
+     handleSearch(searchQuery)
   }, [])
   
 

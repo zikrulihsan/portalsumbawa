@@ -9,10 +9,11 @@ import { ADMIN_PHONE_NUMBER } from '../constant';
 import PriorityCardComponent from '../component/PriorityCardComponent';
 import { FaArrowDown, FaChevronDown, FaChevronUp, FaExclamationTriangle, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import YouTubeVideo from '../component/YoutubeVideo';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
+  const [dataPrio, setDataPrio] = useState([])
   const [masterData, setMasterData] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
@@ -22,6 +23,7 @@ export default function Homepage(props) {
   const inputRef = useRef(null)
   const location = useLocation()
   const searchQueryParam = new URLSearchParams(location.search).get('q');
+  const navigate = useNavigate();
 
   const onGotoExternalLink = (location) => {
     // Redirect logic here
@@ -64,9 +66,13 @@ export default function Homepage(props) {
 
         localStorage.setItem("masterData", JSON.stringify(tempData))
       }
+      setMasterData(tempData.filter(item => !item.isPriority));
+      setDataPrio(tempData.filter(item => item.isPriority == true));
+      if(searchQueryParam)
+        setData(tempData.filter(item => !item.isPriority && (item.services ?? "").toLowerCase().includes(searchQueryParam.toLowerCase()) || item.name.toLowerCase().includes(searchQueryParam.toLowerCase())));
 
-      setData(tempData.filter(item => item.isPriority == true));
-      setMasterData(tempData);
+      else setData(tempData.filter(item => !item.isPriority));
+
     } catch (error) {
       
     } finally {
@@ -99,10 +105,12 @@ export default function Homepage(props) {
     setIsLoading(true)
     if(query != "") {
       setSearchQuery(query)
+      navigate(`/search?q=${query}`);
       setData(masterData.filter(item => !item.isPriority && (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
     }
     else {
       setSearchQuery("")
+      navigate(`/`);
       setData(masterData.filter(item => item.isPriority == true));
     }
     setTimeout(() => {
@@ -124,92 +132,83 @@ export default function Homepage(props) {
       minHeight="100vh"
     > 
       <Box mx={4} pt={8}>
-      <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
-      <SearchComponent
-        searchQuery={searchQueryParam}
-        onSearch={filter}
-        inputRef={inputRef}
+        <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
+        <SearchComponent
+          searchQuery={searchQueryParam}
+          onSearch={filter}
+          inputRef={inputRef}
         />
 
-      {isLoading ? <Spinner mt="16" size="xl"/> :
-      <Box>
-        {data.length > 0 ? <Box>
-
-        { searchQuery == "" ? 
-        <Box>
-          <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsExpanded(!isExpanded)}justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesIcon()}>Daftar Nomor Darurat Sumbawa</Button>
-          <Collapse in={isExpanded}>{data.map((item, index) => ( 
-            <PriorityCardComponent 
+        {isLoading ? <Spinner mt="16" size="xl"/> : <Box>
+        {searchQuery == "" ?
+          <Box>
+            <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsExpanded(!isExpanded)}justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesIcon()}>Daftar Nomor Darurat Sumbawa</Button>
+            <Collapse in={isExpanded}>{dataPrio.map((item, index) => ( 
+              <PriorityCardComponent 
+                key={item.id}
+                id={item.id}
+                index={index}
+                location={item.address}
+                description={item.description}
+                waNumber={item.phoneNumber}
+                title={item.name}
+                />))}
+            </Collapse>
+            <Flex p="2"  gap="2" borderRadius={3} bgColor="rgba(250, 164, 0, 0.07)" justifyContent={"flex-start"} alignItems="center" >
+              <FaExclamationTriangle color="rgba(250, 164, 0, 1)" />
+              <Text color="rgba(250, 164, 0, 1)" fontSize={11}>Hubungi Nomor Di Atas Hanya Dalam Keadaan Darurat</Text>
+            </Flex>
+            <Box>
+            <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsCampaignExpanded(!isCampaignExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesCampaignIcon()}>Yuk Ikut Gerakan Satu Data Sumbawa</Button>
+            <Collapse in={isCampaignExpanded}>
+              <Box textAlign={"left"} > 
+                <Text fontSize={12} mx="2"> Portal Sumbawa adalah Platform Pencarian Penyedia Jasa/Produk #1 di Kabupaten Sumbawa. Karya Asli Muda Mudi Sumbawa.
+                <br/><br/>Yuk, ikuti <b>Gerakan Satu Data Sumbawa</b> Bersama Tim Portal Sumbawa untuk mengetahui update terbaru Portal Sumbawa.</Text>
+                <Flex gap={2} my={2} ml={1}>
+                  <Button onClick={() => onGotoExternalLink("https://www.instagram.com/portalsumbawa/?hl=en")} variant="outline" color="teal" size={"sm"} fontSize={11} leftIcon={<FaInstagram/>}>Instagram Portal Sumbawa</Button>
+                  <Button onClick={() => onGotoExternalLink(whatsappLink)}variant="outline" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>WA Admin Portal</Button>
+                </Flex>
+              </Box>
+            </Collapse> 
+          </Box>
+          </Box> :
+          <Box>
+            {data.length > 0 ? data.map((item, index) => (<CardComponent
               key={item.id}
               id={item.id}
               index={index}
-              location={item.address}
-              description={item.description}
+              addressLink={item.addressLink}
               waNumber={item.phoneNumber}
               title={item.name}
-              />))}
-          </Collapse>
-          <Flex p="2"  gap="2" borderRadius={3} bgColor="rgba(250, 164, 0, 0.07)" justifyContent={"flex-start"} alignItems="center" >
-            <FaExclamationTriangle color="rgba(250, 164, 0, 1)" />
-            <Text color="rgba(250, 164, 0, 1)" fontSize={11}>Hubungi Nomor Di Atas Hanya Dalam Keadaan Darurat</Text>
-          </Flex>
-        </Box>:
-        data.map((item, index) => (<CardComponent
-          key={item.id}
-          id={item.id}
-          index={index}
-          addressLink={item.addressLink}
-          waNumber={item.phoneNumber}
-          title={item.name}
-          highlight={""}
-          description={item.services}
-          operationalDay={item.operationalDay}
-          location={item.address}
-          operationalTime={item.operationalTime}
-          onCtaClick={()=>{}}
-          isPriority={item.isPriority}
-          category={item.category}
-        />
-        ))} </Box> : <Box 
-            mt={4}
-            p={4}
-           
-          >
+              highlight={""}
+              description={item.services}
+              operationalDay={item.operationalDay}
+              location={item.address}
+              operationalTime={item.operationalTime}
+              onCtaClick={()=>{}}
+              isPriority={item.isPriority}
+              category={item.category}
+            />
+          )) : 
+          <Box mt={4} p={4}>
             <Heading fontSize={14}>Tidak ada data yang cocok dengan pencarian.</Heading>
             <Text my={2} fontSize={12} >Coba cari dengan kata kunci lain atau minta admin Portal Sumbawa untuk membantu mencari data yang diperlukan.</Text>
             <Button leftIcon={<FaWhatsapp/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Hubungi Admin</Button>
+          </Box> }
+          </Box>
+        }</Box> }
+
+        {!isLoading && data.length > 0 &&
+          <Box> 
+            <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsRegisterExpanded(!isRegisterExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesRegisterIcon()}>Cara Agar Terdata Di Portal Sumbawa</Button>
+            <Collapse in={isRegisterExpanded}>
+              <Box textAlign={"left"} mx="2" > 
+                <Text fontSize={12}> Hubungi admin WA Portal Sumbawa untuk mengajukan pembaruan atau penambahan data penyedia produk/jasa yang anda miliki.</Text>
+                <Text fontSize={12} mb="2"> <br/> Tim Portal sumbawa akan melakukan verifikasi sederhana sebelum menginputkan usaha anda ke dalam portal data.</Text>
+                <Button onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" color="teal" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>Daftar Melalui Admin</Button>  
+                </Box>
+            </Collapse> 
           </Box>}
-        </Box>}
-
-        {isLoading || searchQuery != "" ? <></> : <Box>
-        <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsCampaignExpanded(!isCampaignExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesCampaignIcon()}>Yuk Ikut Gerakan Satu Data Sumbawa</Button>
-          <Collapse in={isCampaignExpanded}>
-            <Box textAlign={"left"} > 
-              <Text fontSize={12} mx="2"> Portal Sumbawa adalah Platform Pencarian Penyedia Jasa/Produk #1 di Kabupaten Sumbawa. Karya Asli Muda Mudi Sumbawa.
-              <br/><br/>Yuk, ikuti <b>Gerakan Satu Data Sumbawa</b> Bersama Tim Portal Sumbawa untuk mengetahui update terbaru Portal Sumbawa.</Text>
-              <Flex gap={2} my={2} ml={1}>
-                <Button onClick={() => onGotoExternalLink("https://www.instagram.com/portalsumbawa/?hl=en")} variant="outline" color="teal" size={"sm"} fontSize={11} leftIcon={<FaInstagram/>}>Instagram Portal Sumbawa</Button>
-                <Button onClick={() => onGotoExternalLink(whatsappLink)}variant="outline" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>WA Admin Portal</Button>
-              </Flex>
-
-              {/* <YouTubeVideo videoId={"pv_4qe5ex5Q"} />  */}
-            </Box>
-          </Collapse> 
-          
-        </Box>}
-        {isLoading || data.length == 0 ? <></> : <Box>
-        <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsRegisterExpanded(!isRegisterExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesRegisterIcon()}>Cara Agar Terdata Di Portal Sumbawa</Button>
-          <Collapse in={isRegisterExpanded}>
-            <Box textAlign={"left"} mx="2" > 
-              <Text fontSize={12}> Hubungi admin WA Portal Sumbawa untuk mengajukan pembaruan atau penambahan data penyedia produk/jasa yang anda miliki.</Text>
-              <Text fontSize={12} mb="2"> <br/> Tim Portal sumbawa akan melakukan verifikasi sederhana sebelum menginputkan usaha anda ke dalam portal data.</Text>
-              <Button onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" color="teal" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>Daftar Melalui Admin</Button>
-           
-              </Box>
-          </Collapse> 
-         
-        </Box>}
-        
       </Box>
     </Box>
   );
