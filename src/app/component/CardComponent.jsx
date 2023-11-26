@@ -45,8 +45,8 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + convertedWaNumber() + "&text=" + waMessage
   
   const isService = () => {
-    let desc = description ?? ""
-    return !isPriority && desc.toLowerCase().includes("hotel") || desc.toLowerCase().includes("servis") || desc.toLowerCase().includes("service")
+    if(!description) return false;
+    return !isPriority && !description.toLowerCase().includes("minum") && description.toLowerCase().includes("makan")
   }
 
   return (
