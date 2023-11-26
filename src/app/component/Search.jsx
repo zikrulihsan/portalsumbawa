@@ -53,7 +53,7 @@ const SearchComponent = ({ onSearch, inputRef }) => {
           ref={inputRef}
           type="text"
           placeholder="Cari nama tempat/produk/layanan di Sumbawa"
-          fontSize={12}
+          fontSize={13}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           value={querySearch}
@@ -71,7 +71,7 @@ const SearchComponent = ({ onSearch, inputRef }) => {
         </InputRightElement>
       </InputGroup>
       {!isFocus || isBlur ? <></> : 
-      <Text color="gray" mt="1" ml="2" textAlign={"left"} fontSize="12">Sering dicari: AC, kurir, kopi, sate</Text>}
+      <Text color="gray" mt="1" ml="2" textAlign={"left"} fontSize="11">Sering dicari: AC, kurir, kopi, sate</Text>}
     </Box>
   );
 };
