@@ -46,7 +46,7 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
   
   const isService = () => {
     if(!description) return false;
-    return !isPriority && !description.toLowerCase().includes("minum") && description.toLowerCase().includes("makan")
+    return !isPriority && !description.toLowerCase().includes("minum") && !description.toLowerCase().includes("makan")
   }
 
   return (
