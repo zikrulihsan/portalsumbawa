@@ -120,6 +120,7 @@ export default function Homepage(props) {
       if(data.length == 0) {
         setNotFoundCount(notFoundCount + 1)
       }
+
     }, 1000); 
 
     
@@ -129,11 +130,11 @@ export default function Homepage(props) {
   const [isModalOpen, setIsModalOpen] = useState(true)
 
   const closeModal = () => {
-    setNotFoundCount(0)
+    navigate('/')
+    window.location.reload()
   }
 
   const onContinue = () => {
-    setNotFoundCount(0)
     onGotoExternalLink(whatsappLinkNotFound)
   }
 

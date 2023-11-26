@@ -1,7 +1,7 @@
 // SearchComponent.js
 import React, { useRef, useEffect, useState } from 'react';
 import { Text, Box, Input, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
-import { FaCheck, FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
+import { FaArrowRight, FaCheck, FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
 
 const SearchComponent = ({ searchQuery = "", onSearch, inputRef }) => {
   
@@ -70,7 +70,7 @@ const SearchComponent = ({ searchQuery = "", onSearch, inputRef }) => {
         <InputRightElement>
           <IconButton
             aria-label="Search"
-            icon={ querySearch == "" ? <FaSearchLocation /> : isFocus ? <FaCheck color="teal"/> : <FaWindowClose/>}
+            icon={ querySearch == "" ? <FaSearchLocation /> : isFocus ? <FaArrowRight color="teal"/> : <FaWindowClose/>}
             onClick={handleInputIconClick}
             variant="outline"
           />
