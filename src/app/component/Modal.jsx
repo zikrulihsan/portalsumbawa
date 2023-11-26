@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaArrowRight, FaSearch } from "react-icons/fa";
 const MyModal = ({ isOpen, onClose, onContinue }) => {
     return (
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <Center>
         <ModalContent mx="4"  text>
