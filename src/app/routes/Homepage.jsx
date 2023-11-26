@@ -27,10 +27,13 @@ export default function Homepage(props) {
   };
 
   const WA_ADMIN_MESSAGE = "Halo Admin, saya ingin mengetahui lebih lanjut tentang Portal Sumbawa."  
+  const WA_NOT_FOUND = `Halo Admin, saya sedang mencari ${searchQuery} tapi belum ada datanya, mohon bantuannya.`  
   const WA_ADMIN_REGISTER = "Halo Admin, saya ingin menambahkan data penyedia jasa/produk di Portal Sumbawa, mohon bantuannya." 
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_ADMIN_MESSAGE)
   
   const whatsappLinkRegister = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_ADMIN_REGISTER)
+  const whatsappLinkNotFound = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_NOT_FOUND)
+  
 
   const WA_CONTRIBUTOR_MESSAGE = "Halo Admin, saya ingin bertanya tentang kontributor di portal Sumbawa, mohon informasinya."  
   const whatsappLinkContributor = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_CONTRIBUTOR_MESSAGE)
@@ -168,11 +171,13 @@ export default function Homepage(props) {
           category={item.category}
         />
         ))} </Box> : <Box 
-            mt={16}
+            mt={4}
+            p={4}
+           
           >
-            <Heading fontSize={14}>Maaf Sanak, <br />Data belum tersedia.</Heading>
-            <Text my={2} fontSize={12} px={4}>Kabarkan ke tim Sumbawa Portal untuk membantu anda mencari data yang diperlukan.</Text>
-            <Button size={"sm"} onClick={()=> onGotoExternalLink(whatsappLink)} colorScheme={"teal"}>Beritahu Pencarian Anda</Button>
+            <Heading fontSize={14}>Tidak ada data yang cocok dengan pencarian.</Heading>
+            <Text my={2} fontSize={12} >Coba cari dengan kata kunci lain atau minta admin Portal Sumbawa untuk membantu mencari data yang diperlukan.</Text>
+            <Button leftIcon={<FaWhatsapp/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Hubungi Admin</Button>
           </Box>}
         </Box>}
 
@@ -192,7 +197,7 @@ export default function Homepage(props) {
           </Collapse> 
           
         </Box>}
-        {isLoading ? <></> : <Box>
+        {isLoading || data.length == 0 ? <></> : <Box>
         <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsRegisterExpanded(!isRegisterExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesRegisterIcon()}>Cara Agar Terdata Di Portal Sumbawa</Button>
           <Collapse in={isRegisterExpanded}>
             <Box textAlign={"left"} mx="2" > 

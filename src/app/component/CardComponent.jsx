@@ -52,11 +52,11 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
   return (
       <Box
         borderWidth="1px"
-        borderRadius="lg"
+        borderRadius="md"
         overflow="hidden"
         p={4}
         mt={index == 0 ? 2 :4}
-        boxShadow="md"
+        boxShadow="sm"
         align="left"
         onClick={() => redirectToPage('/detailPage/'+id)}
         >

@@ -45,7 +45,8 @@ const SearchComponent = ({ onSearch, inputRef }) => {
   }
 
   return (
-    <Box>
+    <Box >
+      <Box boxShadow={"md"}>
       <InputGroup >
         <Input 
           width={"100vw"}
@@ -70,6 +71,7 @@ const SearchComponent = ({ onSearch, inputRef }) => {
           
         </InputRightElement>
       </InputGroup>
+      </Box>
       {!isFocus || isBlur ? <></> : 
       <Text color="gray" mt="1" ml="2" textAlign={"left"} fontSize="11">Sering dicari: AC, kurir, kopi, sate</Text>}
     </Box>
