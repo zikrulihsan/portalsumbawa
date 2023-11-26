@@ -213,7 +213,7 @@ export default function Homepage(props) {
           <Box mt={4} p={4}>
             <Heading fontSize={14}>Tidak ada data yang cocok dengan pencarian.</Heading>
             <Text my={2} fontSize={12} >Coba cari dengan kata kunci lain atau minta admin Portal Sumbawa untuk membantu mencari data yang diperlukan.</Text>
-            <Button leftIcon={<FaWhatsapp/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Hubungi Admin</Button>
+            <Button leftIcon={<FaWhatsapp/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
           </Box> }
           </Box>
         }</Box> }
