@@ -70,12 +70,12 @@ export default function Homepage(props) {
 
         localStorage.setItem("masterData", JSON.stringify(tempData))
       }
-      setMasterData(tempData.filter(item => !item.isPriority));
+      setMasterData(tempData);
       setDataPrio(tempData.filter(item => item.isPriority == true));
       if(searchQueryParam)
-        setData(tempData.filter(item => !item.isPriority && (item.services ?? "").toLowerCase().includes(searchQueryParam.toLowerCase()) || item.name.toLowerCase().includes(searchQueryParam.toLowerCase())));
+        setData(tempData.filter(item => (item.services ?? "").toLowerCase().includes(searchQueryParam.toLowerCase()) || item.name.toLowerCase().includes(searchQueryParam.toLowerCase())));
 
-      else setData(tempData.filter(item => !item.isPriority));
+      else setData(tempData);
 
     } catch (error) {
       
@@ -110,7 +110,7 @@ export default function Homepage(props) {
     if(query != "") {
       setSearchQuery(query)
       navigate(`/search?q=${query}`);
-      setData(masterData.filter(item => !item.isPriority && (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
+      setData(masterData.filter(item => (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
     }
     else {
       setSearchQuery("")

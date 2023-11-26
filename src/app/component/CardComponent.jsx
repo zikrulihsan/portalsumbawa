@@ -62,9 +62,6 @@ const CardComponent = ({ id, category, index, addressLink, isPriority, waNumber,
         >
         <Flex justifyContent={'space-between'} gap={8}>
           <Heading as="h2" size="md" mb={2} fontSize="14">{title}</Heading>
-          {isPriority && <Box>
-            <FaFire color="gold" size={24}/>
-          </Box>}
           
         </Flex>
         {isPriority ? <></> : 
