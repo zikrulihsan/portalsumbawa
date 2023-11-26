@@ -1,26 +1,30 @@
 import { Modal, Box, Center, Text, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaArrowRight, FaSearch } from "react-icons/fa";
+import { FaArrowRight, FaDoorClosed, FaDoorOpen, FaSearch } from "react-icons/fa";
 const MyModal = ({ isOpen, onClose, onContinue }) => {
     return (
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <Center>
-        <ModalContent mx="4"  text>
-          <ModalHeader fontSize={18}>Masih tidak menemukan data yang anda cari?</ModalHeader>
+        <ModalContent mx="4" height={"72vh"} text>
+          <ModalHeader fontSize={18}> &#128075; Halo naki nakwai, sebelum masuk portal, lihat ini dulu ya!</ModalHeader>
           <ModalBody>
-            <Text fontSize={14}>Minta Tim Portal Sumbawa untuk membantu anda mencarinya di luar platform Portal Sumbawa.*</Text>
-            <Text fontSize={10} mt="2" color="brown">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text>
-          </ModalBody>
+            <Box ml="4">
+                <ul> 
+                    <li><Text fontSize={13}>Saat ini Tim Portal Sumbawa Sedang melakukan <b>Gerakan Satu Data Sumbawa</b>, mengumpulkan berbagai data penyedia jasa/produk di Sumbawa</Text></li>
+                    <li><Text fontSize={13}>Data yang tersedia di dalam Portal masih jauh dari cukup, anda bisa berpartisipasi sebagai pelaku usaha ataupun pengguna</Text></li>
+                    <li><Text fontSize={13}>Anda bisa menginputkan data sebagai penyedia jasa/produk melalui admin</Text></li>
+                    <li><Text fontSize={13}>Sebagai Pengguna, data yang anda cari mungkin masih belum tersedia, Anda bisa memberitahu admin tentang pencarian anda.</Text></li> 
+                    <li><Text fontSize={13}>Admin akan mengutamakan pelengkapan data dari daftar pencarian pengguna tersebut</Text> </li>
+                </ul>
+            </Box>  
+            </ModalBody>
           <ModalFooter>
-            <Box>
-            <Button width="full" fontSize="14" colorScheme="teal" rightIcon={<FaArrowRight/>} onClick={onContinue}>
-              Minta Bantuan Tim Portal, Gratis!
+            
+            <Button width="full" fontSize="14" colorScheme="teal" rightIcon={<Text>&#128640;</Text>} onClick={onClose}>
+             Oke Siap, Lanjut Buka Portal!
             </Button>
-            <Button width="full" textDecoration={"underline"} mt="2" variant="link" fontSize="14" colorScheme="teal" color="teal" rightIcon={<FaSearch/>} onClick={onClose}>
-              Tetap di Web Portal
-            </Button>
-            </Box>
+
             {/* Add additional buttons or actions here */}
           </ModalFooter>
         </ModalContent>

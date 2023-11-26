@@ -7,7 +7,7 @@ import db from '../firebase'
 import { query, collection, where, doc, setDoc, getDocs, getDoc } from "firebase/firestore"; 
 import { ADMIN_PHONE_NUMBER } from '../constant';
 import PriorityCardComponent from '../component/PriorityCardComponent';
-import { FaArrowDown, FaChevronDown, FaChevronUp, FaExclamationTriangle, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaArrowDown, FaArrowRight, FaChevronDown, FaChevronUp, FaExclamationTriangle, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import YouTubeVideo from '../component/YoutubeVideo';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyModal from '../component/Modal';
@@ -47,6 +47,8 @@ export default function Homepage(props) {
   const formLink = "https://docs.google.com/forms/d/e/1FAIpQLScfj6JYCMXojOo3FSFR4-UP8BIe5WfXtkEsYHkFcJw6fIgWyw/viewform"
 
   const fetchData = async () => {
+    const isOnboardingLoaded = localStorage.getItem("isOnboardingLoaded")
+    setIsModalOpen(isOnboardingLoaded == null)
     setIsLoading(true)
 
     try {
@@ -57,7 +59,7 @@ export default function Homepage(props) {
       const remoteVersion = (await getDoc(doc(db, "version", "app-version"))).data().version;
 
       localStorage.setItem("fireStoreVersion", remoteVersion)
-
+      
       if(currentVersion == remoteVersion && currentMasterData != null) {
         tempData = currentMasterData
       } else {
@@ -123,14 +125,13 @@ export default function Homepage(props) {
 
     }, 1000); 
 
-    
-    
   }
 
   const [isModalOpen, setIsModalOpen] = useState(true)
 
   const closeModal = () => {
-    navigate('/')
+    setIsModalOpen(false)
+    localStorage.setItem("isOnboardingLoaded", true)
     window.location.reload()
   }
 
@@ -140,7 +141,7 @@ export default function Homepage(props) {
 
   useEffect(() => {
     fetchData();
-  
+
   }, []);
 
   return (
@@ -150,8 +151,7 @@ export default function Homepage(props) {
       mt={8}
       minHeight="100vh"
     > 
-    {notFoundCount < 6 ? <></> :
-      <MyModal isOpen={isModalOpen} onClose={closeModal} onContinue={onContinue}/>}      
+      <MyModal isOpen={isModalOpen} onClose={closeModal} onContinue={onContinue}/>    
       <Box mx={4} pt={8}>
         <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
         <SearchComponent
@@ -211,10 +211,11 @@ export default function Homepage(props) {
               category={item.category}
             />
           )) : 
-          <Box mt={4} p={4}>
-            <Heading fontSize={14}>Tidak ada data yang cocok dengan pencarian.</Heading>
-            <Text my={2} fontSize={12} >Coba cari dengan kata kunci lain atau minta admin Portal Sumbawa untuk membantu mencari data yang diperlukan.</Text>
-            <Button leftIcon={<FaWhatsapp/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
+          <Box mt={4} p={4} >
+            <Heading fontSize={14}>Data Mungkin Belum Tersedia.</Heading>
+            <Text my={2} fontSize={12} >Anda Bisa Meminta Tim Portal untuk membantu anda mencarinya di luar Web Portal Sumbawa.</Text>
+            <Text bgColor="rgba(250, 164, 0, 0.07)" py="1"fontSize={10} my="2" color="rgba(250, 164, 0, 1)">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text>
+            <Button rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
           </Box> }
           </Box>
         }</Box> }
