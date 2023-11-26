@@ -10,6 +10,7 @@ import PriorityCardComponent from '../component/PriorityCardComponent';
 import { FaArrowDown, FaChevronDown, FaChevronUp, FaExclamationTriangle, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import YouTubeVideo from '../component/YoutubeVideo';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MyModal from '../component/Modal';
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
@@ -20,6 +21,7 @@ export default function Homepage(props) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isCampaignExpanded, setIsCampaignExpanded] = useState(false)
   const [isRegisterExpanded, setIsRegisterExpanded] = useState(false)
+  const [notFoundCount, setNotFoundCount] = useState(0)
   const inputRef = useRef(null)
   const location = useLocation()
   const searchQueryParam = new URLSearchParams(location.search).get('q');
@@ -115,8 +117,24 @@ export default function Homepage(props) {
     }
     setTimeout(() => {
       setIsLoading(false)
-    }, 500); 
+      if(data.length == 0) {
+        setNotFoundCount(notFoundCount + 1)
+      }
+    }, 1000); 
+
     
+    
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState(true)
+
+  const closeModal = () => {
+    setNotFoundCount(0)
+  }
+
+  const onContinue = () => {
+    setNotFoundCount(0)
+    onGotoExternalLink(whatsappLinkNotFound)
   }
 
   useEffect(() => {
@@ -131,6 +149,8 @@ export default function Homepage(props) {
       mt={8}
       minHeight="100vh"
     > 
+    {notFoundCount < 6 ? <></> :
+      <MyModal isOpen={isModalOpen} onClose={closeModal} onContinue={onContinue}/>}      
       <Box mx={4} pt={8}>
         <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
         <SearchComponent
@@ -198,7 +218,7 @@ export default function Homepage(props) {
           </Box>
         }</Box> }
 
-        {!isLoading && data.length > 0 &&
+        {!isLoading && (data.length > 0 || searchQuery == "") &&
           <Box> 
             <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsRegisterExpanded(!isRegisterExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesRegisterIcon()}>Cara Agar Terdata Di Portal Sumbawa</Button>
             <Collapse in={isRegisterExpanded}>

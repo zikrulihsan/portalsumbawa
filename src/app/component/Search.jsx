@@ -78,8 +78,7 @@ const SearchComponent = ({ searchQuery = "", onSearch, inputRef }) => {
         </InputRightElement>
       </InputGroup>
       </Box>
-      {!isFocus || isBlur ? <></> : 
-      <Text color="gray" mt="1" ml="2" textAlign={"left"} fontSize="11">Sering dicari: AC, kurir, kopi, sate</Text>}
+      <Text color="gray" mt="1" textAlign={"center"} fontSize="11">Sering dicari: AC, kurir, kopi, sate</Text>
     </Box>
   );
 };
