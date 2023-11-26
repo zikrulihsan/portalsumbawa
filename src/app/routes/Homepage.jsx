@@ -9,6 +9,7 @@ import { ADMIN_PHONE_NUMBER } from '../constant';
 import PriorityCardComponent from '../component/PriorityCardComponent';
 import { FaArrowDown, FaChevronDown, FaChevronUp, FaExclamationTriangle, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import YouTubeVideo from '../component/YoutubeVideo';
+import { useLocation } from 'react-router-dom';
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
@@ -19,7 +20,8 @@ export default function Homepage(props) {
   const [isCampaignExpanded, setIsCampaignExpanded] = useState(false)
   const [isRegisterExpanded, setIsRegisterExpanded] = useState(false)
   const inputRef = useRef(null)
-  const [isDisplayTitle, setIsDisplayTitle] = useState(true)
+  const location = useLocation()
+  const searchQueryParam = new URLSearchParams(location.search).get('q');
 
   const onGotoExternalLink = (location) => {
     // Redirect logic here
@@ -70,15 +72,12 @@ export default function Homepage(props) {
     } finally {
       setIsLoading(false)
       inputRef.current.focus()
-      setTimeout(() => {
-        setIsExpanded(true)
-      }, 500); 
-      // setTimeout(() => {
-      //   setIsCampaignExpanded(true)
-      //   inputRef.current.focus()
-      // }, 500); 
     }
+
+    console.log(searchQueryParam)
    
+    // if(searchQueryParam)
+    //   filter(searchQueryParam)
   };
 
   const rightExpandablesIcon = () => {
@@ -127,6 +126,7 @@ export default function Homepage(props) {
       <Box mx={4} pt={8}>
       <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
       <SearchComponent
+        searchQuery={searchQueryParam}
         onSearch={filter}
         inputRef={inputRef}
         />

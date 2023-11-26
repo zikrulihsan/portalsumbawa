@@ -1,9 +1,9 @@
 // SearchComponent.js
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Text, Box, Input, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react';
 import { FaCheck, FaCross, FaRemoveFormat, FaSearchLocation, FaWindowClose } from 'react-icons/fa';
 
-const SearchComponent = ({ onSearch, inputRef }) => {
+const SearchComponent = ({ searchQuery, onSearch, inputRef }) => {
   
   const [isFocus, setIsFocus] = useState(true)
   const [isBlur, setIsBlur] = useState(false)
@@ -43,6 +43,11 @@ const SearchComponent = ({ onSearch, inputRef }) => {
       inputRef.current.focus()
     }
   }
+
+  useEffect(() => {
+   handleSearch(searchQuery)
+  }, [])
+  
 
   return (
     <Box >

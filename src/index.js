@@ -19,6 +19,10 @@ const router = createBrowserRouter([
     path: "/detailPage/:itemId",
     element: <DetailPage />,
   },
+  {
+    path: "/search",
+    element: <App />,
+  },
 ]);
 
 
