@@ -78,7 +78,7 @@ const SearchComponent = ({ searchQuery = "", onSearch, inputRef }) => {
         </InputRightElement>
       </InputGroup>
       </Box>
-      <Text color="gray" mt="1" textAlign={"center"} fontSize="11">Sering dicari: AC, kurir, kopi, sate</Text>
+      <Text color="gray" mt="1" textAlign={"center"} fontSize="11">Sering dicari: Servis AC, kurir, kopi, sate</Text>
     </Box>
   );
 };
