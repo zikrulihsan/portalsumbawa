@@ -59,7 +59,7 @@ const SearchComponent = ({ searchQuery = "", onSearch, inputRef }) => {
           borderWidth="2"
           ref={inputRef}
           type="text"
-          placeholder="Cari nama tempat/produk/layanan di Sumbawa"
+          placeholder="Cari layanan/produk/tempat di Sumbawa"
           fontSize={13}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
