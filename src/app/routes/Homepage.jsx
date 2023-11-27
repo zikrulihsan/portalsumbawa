@@ -127,7 +127,7 @@ export default function Homepage(props) {
 
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const closeModal = () => {
     setIsModalOpen(false)
