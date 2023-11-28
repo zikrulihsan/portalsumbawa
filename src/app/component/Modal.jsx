@@ -11,11 +11,9 @@ const MyModal = ({ isOpen, onClose, onContinue }) => {
           <ModalBody>
             <Box ml="4">
                 <ul> 
-                    <li><Text fontSize={13}>Saat ini Tim Portal Sumbawa Sedang melakukan <b>Gerakan Satu Data Sumbawa</b>, mengumpulkan berbagai data penyedia jasa/produk di Sumbawa.</Text></li>
-                    <li><Text fontSize={13}>Data yang tersedia di dalam Portal <b>masih jauh dari cukup,</b> anda bisa berpartisipasi sebagai pelaku usaha ataupun pengguna.</Text></li>
-                    <li><Text fontSize={13}>Anda bisa menginputkan data sebagai penyedia jasa/produk melalui admin.</Text></li>
-                    <li><Text fontSize={13}>Sebagai Pengguna, data yang anda cari mungkin masih belum tersedia, Anda bisa memberitahu admin tentang pencarian anda.</Text></li> 
-                    <li><Text fontSize={13}>Admin akan mengutamakan pelengkapan data dari daftar pencarian pengguna tersebut.</Text> </li>
+                    <li><Text fontSize={13}>Di Portal Sumbawa anda bisa <b>Mencari Semua Produk/Jasa</b>, di kabupaten Sumbawa</Text></li>
+                    <li><Text fontSize={13}>Jika data tidak tersedia, anda bisa minta tim Portal Sumbawa untuk mencarinya, <b>Gratis!</b></Text></li>
+                    <li><Text fontSize={13}>Anda juga bisa menginputkan data sebagai penyedia jasa/produk melalui admin.</Text></li> 
                     <li><Text fontSize={13}>Itu saja, mohon maaf lahir batin, <b>Selamat Mencoba!</b></Text> </li>
                 </ul>
             </Box>  

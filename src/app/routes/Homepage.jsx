@@ -11,6 +11,7 @@ import { FaArrowDown, FaArrowRight, FaChevronDown, FaChevronUp, FaExclamationTri
 import YouTubeVideo from '../component/YoutubeVideo';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyModal from '../component/Modal';
+import ModalNotFound from '../component/ModalNotFound';
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
@@ -72,9 +73,10 @@ export default function Homepage(props) {
       }
       setMasterData(tempData);
       setDataPrio(tempData.filter(item => item.isPriority == true));
-      if(searchQueryParam)
+      if(searchQueryParam) {
+        console.log("masuk sini")
         setData(tempData.filter(item => (item.services ?? "").toLowerCase().includes(searchQueryParam.toLowerCase()) || item.name.toLowerCase().includes(searchQueryParam.toLowerCase())));
-
+      }
       else setData(tempData);
 
     } catch (error) {
@@ -83,6 +85,8 @@ export default function Homepage(props) {
       setIsLoading(false)
       inputRef.current.focus()
     }
+
+    console.log(data.length.toString() + " lenght data");
 
     console.log(searchQueryParam)
    
@@ -119,8 +123,10 @@ export default function Homepage(props) {
     }
     setTimeout(() => {
       setIsLoading(false)
-      if(data.length == 0) {
-        setNotFoundCount(notFoundCount + 1)
+      if(data.length > 0) {
+        setIsModalNotFoundOpen(false)
+      } else {
+        setIsModalNotFoundOpen(true)
       }
 
     }, 1000); 
@@ -129,8 +135,11 @@ export default function Homepage(props) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const [isModalNotFoundOpen, setIsModalNotFoundOpen] = useState(false)
+
   const closeModal = () => {
     setIsModalOpen(false)
+    navigate('/')
     localStorage.setItem("isOnboardingLoaded", true)
     window.location.reload()
   }
@@ -151,6 +160,7 @@ export default function Homepage(props) {
       mt={8}
       minHeight="100vh"
     > 
+      <ModalNotFound isOpen={isModalNotFoundOpen} onClose={closeModal} onContinue={onContinue}/>    
       <MyModal isOpen={isModalOpen} onClose={closeModal} onContinue={onContinue}/>    
       <Box mx={4} pt={8}>
         <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
@@ -180,11 +190,11 @@ export default function Homepage(props) {
               <Text color="rgba(250, 164, 0, 1)" fontSize={11}>Hubungi Nomor Di Atas Hanya Dalam Keadaan Darurat</Text>
             </Flex>
             <Box>
-            <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsCampaignExpanded(!isCampaignExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesCampaignIcon()}>Yuk Ikut Gerakan Satu Data Sumbawa</Button>
+            <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsCampaignExpanded(!isCampaignExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesCampaignIcon()}>Yuk Ikut Gerakan Portal Sumbawa</Button>
             <Collapse in={isCampaignExpanded}>
               <Box textAlign={"left"} > 
                 <Text fontSize={12} mx="2"> Portal Sumbawa adalah Platform Pencarian Penyedia Jasa/Produk #1 di Kabupaten Sumbawa. Karya Asli Muda Mudi Sumbawa.
-                <br/><br/>Yuk, ikuti <b>Gerakan Satu Data Sumbawa</b> Bersama Tim Portal Sumbawa untuk mengetahui update terbaru Portal Sumbawa.</Text>
+                <br/><br/>Yuk, ikuti <b>Perkembangan Portal Sumbawa</b> Bersama Tim Portal Sumbawa untuk mengetahui update terbaru Portal Sumbawa.</Text>
                 <Flex gap={2} my={2} ml={1}>
                   <Button onClick={() => onGotoExternalLink("https://www.instagram.com/portalsumbawa/?hl=en")} variant="outline" color="teal" size={"sm"} fontSize={11} leftIcon={<FaInstagram/>}>Instagram Portal Sumbawa</Button>
                   <Button onClick={() => onGotoExternalLink(whatsappLink)}variant="outline" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>WA Admin Portal</Button>
