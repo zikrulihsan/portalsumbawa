@@ -161,7 +161,7 @@ export default function Homepage(props) {
       mt={8}
       minHeight="100vh"
     > 
-      <ModalNotFound isOpen={isModalNotFoundOpen} onClose={closeModal} onContinue={onContinue}/>    
+      {/* <ModalNotFound isOpen={isModalNotFoundOpen} onClose={closeModal} onContinue={onContinue}/>     */}
       <MyModal isOpen={isModalOpen} onClose={closeModal} onContinue={onContinue}/>    
       <Box mx={4} pt={8}>
         <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
@@ -222,11 +222,11 @@ export default function Homepage(props) {
               category={item.category}
             />
           )) : 
-          <Box mt={4} p={4} >
-            {/* <Heading fontSize={14}>Data Mungkin Belum Tersedia.</Heading> */}
-            <Text my={2} fontSize={12} >Data Belum Tersedia, Anda Bisa Meminta Tim Portal untuk membantu anda mencarinya di luar Web Portal Sumbawa.</Text>
-            <Text bgColor="rgba(250, 164, 0, 0.07)" py="1"fontSize={10} my="2" color="rgba(250, 164, 0, 1)">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text>
-            {/* <Button rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button> */}
+          <Box mt={4} p={4} textAlign="center">
+            <Heading fontSize={14}>&#9888; Data belum tersedia di Web, <br/>Silahkan Minta Bantuan Tim Portal.</Heading>
+            <Text mt={2} mb="6" fontSize={12} >Tim Portal Sumbawa akan membantu anda menemukan data yang anda butuhkan di luar Portal Sumbawa.</Text>
+            {/* <Text bgColor="rgba(250, 164, 0, 0.07)" py="1"fontSize={10} my="2" color="rgba(250, 164, 0, 1)">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text> */}
+            <Button px="4" rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
           </Box> }
           </Box>
         }</Box> }
