@@ -6,8 +6,8 @@ const ModalNotFound = ({ isOpen, onClose, onContinue }) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <Center>
-        <ModalContent mx="4" minHeight={"30vh"} text>
-          <ModalHeader fontSize={16}>&#9888; Data belum tersedia di Web Portal Sumbawa, tapi...</ModalHeader>
+        <ModalContent mx="4" minHeight={"40vh"} text>
+          <ModalHeader fontSize={16}>&#9888; Data belum tersedia di Web, Silahkan Minta Bantuan Tim Portal.</ModalHeader>
           <ModalBody>
             <Box>
                 <Text fontSize={14}><b>Jangan khawatir!</b> Tim Portal Sumbawa akan membantu anda menemukan data yang anda butuhkan di luar Portal Sumbawa.</Text>
