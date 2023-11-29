@@ -226,7 +226,7 @@ export default function Homepage(props) {
             <Heading fontSize={14}>&#9888; Data belum tersedia di Web, <br/>Silahkan Minta Bantuan Tim Portal.</Heading>
             <Text mt={2} mb="6" fontSize={12} >Tim Portal Sumbawa akan membantu anda menemukan data yang anda butuhkan di luar Portal Sumbawa.</Text>
             {/* <Text bgColor="rgba(250, 164, 0, 0.07)" py="1"fontSize={10} my="2" color="rgba(250, 164, 0, 1)">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text> */}
-            <Button px="4" rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
+            <Button px="4" rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} variant="outline" bgColor="teal">Minta Bantuan Tim Portal, Gratis!</Button>
           </Box> }
           </Box>
         }</Box> }
