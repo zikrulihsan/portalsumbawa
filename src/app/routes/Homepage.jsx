@@ -236,9 +236,10 @@ export default function Homepage(props) {
             <Button mt="2" fontSize={14} px="2" width="full" bgColor={"white"} onClick={ () => setIsRegisterExpanded(!isRegisterExpanded)} justifyContent={'space-between'} color="teal" rightIcon={rightExpandablesRegisterIcon()}>Cara Agar Terdata Di Portal Sumbawa</Button>
             <Collapse in={isRegisterExpanded}>
               <Box textAlign={"left"} mx="2" > 
-                <Text fontSize={12}> Hubungi admin WA Portal Sumbawa untuk mengajukan pembaruan atau penambahan data penyedia produk/jasa yang anda miliki.</Text>
+                <Text fontSize={12}> Input data anda melalui form online untuk mengajukan pembaruan atau penambahan data penyedia produk/jasa yang anda miliki.</Text>
                 <Text fontSize={12} mb="2"> <br/> Tim Portal sumbawa akan melakukan verifikasi sederhana sebelum menginputkan usaha anda ke dalam portal data.</Text>
-                <Button onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" color="teal" size={"sm"} fontSize={11} leftIcon={<FaWhatsapp/>}>Daftar Melalui Admin</Button>  
+                <Button  mb="2" onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" colorScheme="teal" size={"sm"} fontSize={11} rightIcon={<FaArrowRight/>}>Daftar Via Form Online Sekarang</Button>  
+                <Button onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" color="teal" size={"sm"} fontSize={11} rightIcon={<FaWhatsapp/>}>Hubungi Admin</Button>  
                 </Box>
             </Collapse> 
           </Box>}
