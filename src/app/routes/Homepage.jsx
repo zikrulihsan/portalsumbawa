@@ -11,6 +11,7 @@ import { FaArrowDown, FaArrowRight, FaChevronDown, FaChevronUp, FaExclamationTri
 import YouTubeVideo from '../component/YoutubeVideo';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MyModal from '../component/Modal';
+import ModalNotFound from '../component/ModalNotFound';
 
 export default function Homepage(props) {
   const [data, setData] = useState([]);
@@ -33,7 +34,7 @@ export default function Homepage(props) {
   };
 
   const WA_ADMIN_MESSAGE = "Halo Admin, saya ingin mengetahui lebih lanjut tentang Portal Sumbawa."  
-  const WA_NOT_FOUND = `Halo Admin, saya sedang mencari ${searchQuery}, mohon bantuannya.`  
+  const WA_NOT_FOUND = `Halo Admin, saya sedang mencari ${searchQuery} tapi belum ada datanya, mohon bantuannya.`  
   const WA_ADMIN_REGISTER = "Halo Admin, saya ingin menambahkan data penyedia jasa/produk di Portal Sumbawa, mohon bantuannya." 
   const whatsappLink = "https://api.whatsapp.com/send/?phone=" + ADMIN_PHONE_NUMBER + "&text=" + encodeURI(WA_ADMIN_MESSAGE)
   
@@ -122,12 +123,19 @@ export default function Homepage(props) {
     }
     setTimeout(() => {
       setIsLoading(false)
+      if(data.length > 0) {
+        setIsModalNotFoundOpen(false)
+      } else {
+        setIsModalNotFoundOpen(true)
+      }
 
     }, 1000); 
 
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const [isModalNotFoundOpen, setIsModalNotFoundOpen] = useState(false)
 
   const closeModal = () => {
     setIsModalOpen(false)
@@ -152,14 +160,14 @@ export default function Homepage(props) {
       mt={8}
       minHeight="100vh"
     > 
+      <ModalNotFound isOpen={isModalNotFoundOpen} onClose={closeModal} onContinue={onContinue}/>    
       <MyModal isOpen={isModalOpen} onClose={closeModal} onContinue={onContinue}/>    
       <Box mx={4} pt={8}>
-        <Heading as="h2" textAlign="left" fontSize={16} mb="2" >Temukan semua kebutuhan anda disini &#128640;</Heading>
+        <Heading as="h2" textAlign="center" fontSize={16} ml="2" mb="2" >Halo Sanak, mau cari apa hari ini?</Heading>
         <SearchComponent
           searchQuery={searchQueryParam}
           onSearch={filter}
           inputRef={inputRef}
-          onToTimPortal={() => onGotoExternalLink(whatsappLinkNotFound)}
         />
 
         {isLoading ? <Spinner mt="16" size="xl"/> : <Box>
@@ -196,31 +204,28 @@ export default function Homepage(props) {
           </Box>
           </Box> :
           <Box>
-            {data.length > 0 ? <Box>
-            <Text fontSize="10" mt="2" color="gray">Hasil Pencarian, ditemukan {data.length} data:</Text>
-              {data.map((item, index) => (<CardComponent
-                key={item.id}
-                id={item.id}
-                index={index}
-                addressLink={item.addressLink}
-                waNumber={item.phoneNumber}
-                title={item.name}
-                highlight={""}
-                description={item.services}
-                operationalDay={item.operationalDay}
-                location={item.address}
-                operationalTime={item.operationalTime}
-                onCtaClick={()=>{}}
-                isPriority={item.isPriority}
-                category={item.category}
-              />
-            ))}
-            </Box>: 
+            {data.length > 0 ? data.map((item, index) => (<CardComponent
+              key={item.id}
+              id={item.id}
+              index={index}
+              addressLink={item.addressLink}
+              waNumber={item.phoneNumber}
+              title={item.name}
+              highlight={""}
+              description={item.services}
+              operationalDay={item.operationalDay}
+              location={item.address}
+              operationalTime={item.operationalTime}
+              onCtaClick={()=>{}}
+              isPriority={item.isPriority}
+              category={item.category}
+            />
+          )) : 
           <Box mt={4} p={4} >
-            <Heading fontSize={14}>Data Belum Ada di Web Portal</Heading>
-            <Text my={2} fontSize={12} >Silahkan cari dengan keyword lain, atau Anda minta Tim Portal untuk menemukan pencarian anda di luar Web Portal Sumbawa.</Text>
+            <Heading fontSize={14}>Data Mungkin Belum Tersedia.</Heading>
+            <Text my={2} fontSize={12} >Anda Bisa Meminta Tim Portal untuk membantu anda mencarinya di luar Web Portal Sumbawa.</Text>
             <Text bgColor="rgba(250, 164, 0, 0.07)" py="1"fontSize={10} my="2" color="rgba(250, 164, 0, 1)">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text>
-            {/* <Button rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button> */}
+            <Button rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
           </Box> }
           </Box>
         }</Box> }
