@@ -6,7 +6,7 @@ const ModalNotFound = ({ isOpen, onClose, onContinue }) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <Center>
-        <ModalContent mx="4" minHeight={"40vh"} text>
+        <ModalContent mx="4" minHeight={"35vh"} text>
           <ModalHeader fontSize={16}>&#9888; Data belum tersedia di Web, Silahkan Minta Bantuan Tim Portal.</ModalHeader>
           <ModalBody>
             <Box>
@@ -18,7 +18,7 @@ const ModalNotFound = ({ isOpen, onClose, onContinue }) => {
             <Button width="full" fontSize="14" size="sm" colorScheme="teal" rightIcon={<FaArrowRight/>} onClick={onContinue}>
               Cari Via Tim Portal, Gratis!
             </Button>
-            <Button width="full" textDecoration={"underline"} variant="link" fontSize="14" colorScheme="teal" rightIcon={<FaSearch/>} onClick={onClose}>
+            <Button width="full" textDecoration={"underline"} variant="link" fontSize="14" color={"#bab8b8"} rightIcon={<FaSearch/>} onClick={onClose}>
               Lanjut Cari Di Web
             </Button>
 
