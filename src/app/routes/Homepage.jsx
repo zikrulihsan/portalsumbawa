@@ -74,8 +74,9 @@ export default function Homepage(props) {
       setMasterData(tempData);
       setDataPrio(tempData.filter(item => item.isPriority == true));
       if(searchQueryParam) {
-        console.log("masuk sini")
-        setData(tempData.filter(item => (item.services ?? "").toLowerCase().includes(searchQueryParam.toLowerCase()) || item.name.toLowerCase().includes(searchQueryParam.toLowerCase())));
+        let filteredData = tempData.filter(item => (item.services ?? "").toLowerCase().includes(searchQueryParam.toLowerCase()) || item.name.toLowerCase().includes(searchQueryParam.toLowerCase()));
+        setData(filteredData)
+        setSearchQuery(searchQueryParam)
       }
       else setData(tempData);
 
@@ -107,27 +108,27 @@ export default function Homepage(props) {
   }
 
   const filter = async (query) => {
-
+    let filterResult = []
     if(query.length < 2 && query != "") return;
 
     setIsLoading(true)
     if(query != "") {
       setSearchQuery(query)
       navigate(`/search?q=${query}`);
-      setData(masterData.filter(item => (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase())));
+      filterResult = masterData.filter(item => (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase()))
+      setData(filterResult);
     }
     else {
       setSearchQuery("")
       navigate(`/`);
-      setData(masterData.filter(item => item.isPriority == true));
+      filterResult = masterData.filter(item => item.isPriority == true)
+      setData(filterResult);
     }
     setTimeout(() => {
       setIsLoading(false)
-      if(data.length > 0) {
-        setIsModalNotFoundOpen(false)
-      } else {
+      if(filterResult.length == 0) {
         setIsModalNotFoundOpen(true)
-      }
+      } 
 
     }, 1000); 
 
@@ -222,10 +223,10 @@ export default function Homepage(props) {
             />
           )) : 
           <Box mt={4} p={4} >
-            <Heading fontSize={14}>Data Mungkin Belum Tersedia.</Heading>
-            <Text my={2} fontSize={12} >Anda Bisa Meminta Tim Portal untuk membantu anda mencarinya di luar Web Portal Sumbawa.</Text>
+            {/* <Heading fontSize={14}>Data Mungkin Belum Tersedia.</Heading> */}
+            <Text my={2} fontSize={12} >Data Belum Tersedia, Anda Bisa Meminta Tim Portal untuk membantu anda mencarinya di luar Web Portal Sumbawa.</Text>
             <Text bgColor="rgba(250, 164, 0, 0.07)" py="1"fontSize={10} my="2" color="rgba(250, 164, 0, 1)">*Data di Portal Sumbawa akan terus diperbarui berdasarkan rekomendasi dan kebutuhan anda.</Text>
-            <Button rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button>
+            {/* <Button rightIcon={<FaArrowRight/>} size={"sm"} onClick={()=> onGotoExternalLink(whatsappLinkNotFound)} width="full" colorScheme={"teal"}>Minta Bantuan Tim Portal, Gratis!</Button> */}
           </Box> }
           </Box>
         }</Box> }
