@@ -113,12 +113,16 @@ export default function Homepage(props) {
 
     setIsLoading(true)
     if(query != "") {
+      console.log("masuk sini", query)
       setSearchQuery(query)
       navigate(`/search?q=${query}`);
+      console.log("masuk sini", masterData.length)
       filterResult = masterData.filter(item => (item.services ?? "").toLowerCase().includes(query.toLowerCase()) || item.name.toLowerCase().includes(query.toLowerCase()))
       setData(filterResult);
     }
     else {
+
+      console.log("masuk sana")
       setSearchQuery("")
       navigate(`/`);
       filterResult = masterData.filter(item => item.isPriority == true)
@@ -238,7 +242,7 @@ export default function Homepage(props) {
               <Box textAlign={"left"} mx="2" > 
                 <Text fontSize={12}> Input data anda melalui form online untuk mengajukan pembaruan atau penambahan data penyedia produk/jasa yang anda miliki.</Text>
                 <Text fontSize={12} mb="2"> <br/> Tim Portal sumbawa akan melakukan verifikasi sederhana sebelum menginputkan usaha anda ke dalam portal data.</Text>
-                <Button  mb="2" onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" colorScheme="teal" size={"sm"} fontSize={11} rightIcon={<FaArrowRight/>}>Daftar Via Form Online Sekarang</Button>  
+                <Button  mb="2" onClick={() => onGotoExternalLink(formLink)} width="full" colorScheme="teal" size={"sm"} fontSize={11} rightIcon={<FaArrowRight/>}>Daftar Via Form Online Sekarang</Button>  
                 <Button onClick={() => onGotoExternalLink(whatsappLinkRegister)} width="full" color="teal" size={"sm"} fontSize={11} rightIcon={<FaWhatsapp/>}>Hubungi Admin</Button>  
                 </Box>
             </Collapse> 
